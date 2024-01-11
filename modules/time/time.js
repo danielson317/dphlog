@@ -4,13 +4,14 @@
  */
 var state = 'now';
 var main_interval;
+
 $(document).ready(function()
 {
+let $date_and_epoch = $('.date-and-epoch');
+let $form = $('#time_converter');
+
   // Time conversions from milliseconds.
   const MILI_SEC = 1000;
-
-  let $form = $('#time_converter');
-  let $date_and_epoch = $('.date-and-epoch');
 
   // Initialize clocks.
   clockStep();
@@ -53,13 +54,33 @@ $(document).ready(function()
       $form.find('.field.timestamp input').val('');
       $form.find('.field.time input').val('');
       $form.find('.field.date input').val('');
-      $form.find('.field.timezone select').val('America/New_York');
+
 
       //Add red border to the local timezone clock.
       $('.current-timezone').removeClass('current-timezone');
       $('.clock-wrap#' + machineName(user_time_zone)).addClass('current-timezone');
       main_interval = setInterval(clockStep, MILI_SEC);
     }).click();
+ /*******************
+   * Button to copy unix time to clipboard.
+   *******************/
+
+  // if copy button is clicked copy unix time to clipboard
+  $date_and_epoch.find('.copy-button').click(function(e) 
+  {
+    
+    let unix_time_value = $date_and_epoch.find('.unix-time').text();
+
+    let temp_value = $('<textarea>');
+    
+    $('body').append(temp_value);
+
+    temp_value.val(unix_time_value).select();
+
+    document.execCommand('copy');
+
+    temp_value.remove();
+  });
 });
 
 /**
@@ -86,6 +107,7 @@ function clockStep()
     datetime = new Date();
     date_time = new Intl.DateTimeFormat('en-US', options).format(datetime);
     epoch = Math.floor(Date.now() / 1000);
+
   }
   // Otherwise set the date to the inputted time.
   else
@@ -99,8 +121,8 @@ function clockStep()
 
     // If timestamp is empty, use input from date/time section.
     if (timestamp === "")
-    {
-      datetime = parseDateTimeInputData(time_value, date_value, timezone);
+    { //default timezone to user setting
+      datetime = parseDateTimeInputData(time_value, date_value, setValue($user['timezone']));
       date_time = new Intl.DateTimeFormat('en-US', options).format(datetime);
 
       epoch = Math.floor(datetime.getTime() / 1000);

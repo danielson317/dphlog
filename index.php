@@ -63,6 +63,7 @@ function getRegistry()
     'ajax/unserialize' => 'phpUnserializeAjax', /** @uses phpUnserializeAjax() */
     'calculator' => 'calculatorPage', /** @uses calculatorPage() */
     'calculator2' => 'calculator2Page', /** @uses calculator2Page() */
+    'image-converter'=> 'imageConverter', /** @uses imageConverter() */
   );
 
   return $registry;
@@ -110,6 +111,7 @@ function menu()
 
   $output .= htmlWrap('a', 'Unserialize', array('href' => '/unserialize'));
   $output .= htmlWrap('a', 'Calculator', array('href' => '/calculator'));
+  $output .= htmlWrap('a', 'Image Converter', array('href' =>'/image-converter'));
 
   // Username.
   GLOBAL $logged_in_user;

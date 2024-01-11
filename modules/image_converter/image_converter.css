@@ -1,0 +1,130 @@
+#menu
+{
+    background-color: #DEDEDE;
+    white-space: nowrap;
+    float: right;
+    justify-content: flex-end;
+}
+
+.label
+{
+    color: #08A2A4;
+    font-weight: 700;
+}
+
+
+a
+{
+    color: #0A0A0A;
+    text-decoration: none;
+}
+
+#menu ul
+{
+    display: none;
+    position: absolute;
+    background-color: white;
+    margin: 0;
+    padding: 5px;
+}
+
+h1
+{
+    font-size: 22px;
+    margin: 0;
+    text-align: center;
+    background-color: #E7E7E7;
+}
+
+
+body
+{
+    background-color:  #FAFAFA;
+}
+
+input, select 
+{
+    background-color: #E7E7E7;
+    padding: 4px;
+    text-align: center;
+}
+
+.image-preview 
+{
+    margin: 5px auto;
+    border: 2px solid #717D7E;
+    overflow: hidden;
+    width:400px;
+    height:250px;
+}
+.image-converter-form 
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.preview-container {
+    margin: 5px auto;
+    border: 2px solid #717D7E;
+    overflow: hidden;
+}
+
+.image-preview img {
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+.image-converter-button 
+{
+    display: flex;
+    justify-content: center;
+
+}
+
+.choose-btn input[type=file]
+{
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    padding: 2px 10px 3px 20px;
+    border-radius: 15px;
+    color: #FAFAFA;
+    background-color: #08A2A4;
+    cursor: pointer;
+}
+
+.convert-btn input[type=submit] 
+{
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    padding: 2px 10px 3px 20px;
+    border-radius: 15px;
+    color: #FAFAFA;
+    background-color: #08A2A4;
+    cursor: pointer;
+}
+.choose-btn
+{
+    flex-grow: 0;
+    flex-basis: 70px;
+    text-align: center;
+}
+.convert-btn 
+{
+    flex-grow: 0;
+    flex-basis: 70px;
+    text-align: center;
+}
+
+.file-type
+{
+    padding:2px 10px 0px 1px;
+    
+}
+.convert-btn
+{  
+    padding:2px 10px 0px 1px;
+    
+}
+

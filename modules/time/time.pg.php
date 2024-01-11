@@ -22,8 +22,12 @@ function timePage()
   // Top clock.
   $top_clock = htmlWrap('div', '01/01/1970', array('class' => array('current-date')));
   $top_clock .= htmlWrap('div', '1234567890', array('class' => array('unix-time')));
+  // Copy button 
+  $top_clock .= new FieldSubmit('copy-button', 'Copy📋', array('id' => array('copy-button')));
   $top_clock .= htmlWrap('div', '', array('id' => array('clock-state')));
   $output .= htmlWrap('div', $top_clock, array('class' => array('date-and-epoch')));
+
+
 
   // Reset/Now button.
 //  $now_button = new FieldSubmit('now-button', 'Now');

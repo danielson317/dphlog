@@ -35,31 +35,6 @@ h1
     background-color: #E7E7E7;
 }
 
-.convert-button input[type=submit]
-{
-    font-size: 16px;
-    text-align: center;
-    text-decoration: none;
-
-    padding: 2px 20px 3px 20px;
-    border-radius: 15px;
-    color: #FAFAFA;
-    background-color: #08A2A4;
-    cursor: pointer;
-}
-
-.now-button input[type=submit]
-{
-    font-size: 16px;
-    text-align: center;
-    text-decoration: none;
-
-    padding: 2px 20px 3px 20px;
-    border-radius: 15px;
-    color: #FAFAFA;
-    background-color: #08A2A4;
-    cursor: pointer;
-}
 
 body
 {
@@ -87,6 +62,10 @@ input, select
 {
     background-color: #E7E7E7;
     padding: 4px;
+
+}
+input:hover {
+  box-shadow: 0 0 5px rgba(8,162,164);
 }
 
 .timestamp
@@ -123,6 +102,52 @@ input, select
     flex-grow: 0;
     flex-basis: 70px;
 }
+.copy-button
+{
+    flex-grow: 0;
+    flex-basis: 70px;
+    padding-left: 20px;
+}
+.convert-button input[type=submit]
+{
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+
+    padding: 2px 20px 3px 20px;
+    border-radius: 15px;
+    color: #FAFAFA;
+    background-color: #08A2A4;
+    cursor: pointer;
+}
+
+.now-button input[type=submit]
+{
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+
+    padding: 2px 20px 3px 20px;
+    border-radius: 15px;
+    color: #FAFAFA;
+    background-color: #08A2A4;
+    cursor: pointer;
+}
+
+.copy-button input[type=submit]
+{
+    
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+
+    padding: 2px 20px 3px 20px;
+    border-radius: 15px;
+    color: #FAFAFA;
+    background-color: #08A2A4;
+    cursor: pointer;
+}
+
 
 .date-and-epoch
 {
@@ -142,7 +167,7 @@ input, select
 
 .date-and-epoch div
 {
-    width: 300px;
+    width: 200px;
 }
 
 .clock-container

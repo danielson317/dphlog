@@ -33,6 +33,7 @@ function timeForm()
   $form->addField($field);
   return $form;
 }
+  
 
 /**
  * @param $timezone: String containing iana time zone in this format 'America/Chicago'.

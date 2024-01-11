@@ -57,3 +57,5 @@ include ROOT_PATH . '/modules/time/time.inc.php';
 
 include ROOT_PATH . '/modules/calculator/calculator.pg.php';
 include ROOT_PATH . '/modules/calculator/calculator2.pg.php';
+
+include ROOT_PATH . '/modules/image_converter/image_converter.pg.php';

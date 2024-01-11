@@ -65,6 +65,10 @@ class Form
 
   function addField(Field $field)
   {
+    if ($field instanceof FieldFile)
+    {
+      $this->attr['enctype'] = 'multipart/form-data';
+    }
     if (array_key_exists($field->getId(), $this->values))
     {
       $field->setValue($this->values[$field->getId()]);
@@ -359,7 +363,7 @@ class FieldCheckbox extends Field
     $output .= htmlSolo('input', $attr);
 
     // Label.
-    $attr = array('class' => array('label'), 'for' => $this->id);
+    $attr = array('id' => array('label'), 'for' => $this->id);
     $output .= htmlWrap('label', $this->label, $attr);
 
     // Wrapper.
@@ -367,6 +371,54 @@ class FieldCheckbox extends Field
     $output = htmlWrap('div', $output, $attr);
     return $output;
   }
+}
+class FieldRadio extends Field
+{
+    protected $options;
+
+     function __construct($id, $label = '')
+    {
+        parent::__construct($id, $label);
+    }
+
+     function setOptions($options)
+    {
+        $this->options = $options;
+        return $this;
+    }
+
+     function __toString()
+    {
+        $output = '';
+
+        $attr = array('class' => array('label'), 'for' => $this->id);
+        $output .= htmlWrap('label', $this->label, $attr);
+
+        foreach ($this->options as $value => $label) {
+            $inputId = $this->id . '_' . $value;
+
+            $inputAttr = array(
+                'type' => 'radio',
+                'id' => $inputId, 
+                'name' => $this->id,
+                'value' => $value,
+            );
+
+            if ($value == $this->value) 
+            {
+                $inputAttr['checked'] = 'checked';
+            }
+
+            $output .= htmlSolo('input', $inputAttr);
+            $output .= htmlWrap('label', $label, array('for' => $inputId));
+        }
+
+        // Wrapper.
+        $attr = array('class' => array('field', 'radio', $this->id));
+        $output = htmlWrap('div', $output, $attr);
+
+        return $output;
+    }
 }
 
 class FieldTextarea extends Field
@@ -435,6 +487,39 @@ class FieldSubmit extends Field
     $output = htmlWrap('div', $output, $attr);
     return $output;
   }
+}
+class FieldFile extends Field
+{
+    function __construct($id, $value = '')
+    {
+        parent::__construct($id);
+        $this->value = $value;
+    }
+
+    function setID($id)
+    {
+        $this->attr = array_merge($this->attr, $id);
+        return $this;
+    }
+
+    function __toString()
+    {
+        // Input.
+        $attr = $this->attr;
+        $attr['name'] = $this->id;
+        $attr['type'] = 'file';
+        if ($this->value)
+        {
+            $attr['value'] = $this->value;
+        }
+
+        $output = htmlSolo('input', $attr);
+
+        // Wrapper.
+        $attr = array('class' => array('field', 'textarea', $this->id));
+        $output = htmlWrap('div', $output, $attr);
+        return $output;
+    }
 }
 
 class FieldMarkup extends Field
