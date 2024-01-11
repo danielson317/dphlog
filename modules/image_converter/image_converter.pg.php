@@ -38,10 +38,10 @@ function imageConverterForm()
     else
     {
       // Check if file-type has been selected
-      $outputFormat = isset($_POST['file-type']) ? strtolower($_POST['file-type']) : 'png';
+      $output_format = isset($_POST['file-type']) ? strtolower($_POST['file-type']) : 'png';
 
       // Get the converted image data
-      $convertedImageData = convertWebpToFormat($file['tmp_name'], $outputFormat);
+      $convertedImageData = convertWebpToFormat($file['tmp_name'], $output_format);
 
       if (!$convertedImageData)
       {
@@ -51,32 +51,30 @@ function imageConverterForm()
       else
       {
         // Set the format for the image file
-        header('Content-Type: image/webp');
-        header('Content-Disposition: attachment; filename="webp_image.webp"');
+        header('Content-Type: image/' . $output_format);
+        header('Content-Disposition: attachment; filename="webp_image.' . $output_format . '"');
+        header('Content-Length: ' . strlen($convertedImageData));
         echo $convertedImageData;
-        die();
       }
-
-      // Clean up: Remove the temporary file
-      unlink($file['tmp_name']);
+      die();
     }
   }
   $output = '';
-  $form = new Form('image_converter', 'enctype="multipart/form-data"');
+  $form = new Form('image_converter');
 
   $field = new FieldFile('choose-btn', 'Choose a file');
-  $field->setID(['id' => 'choose-btn']);
+  $field->setID(array('id' => 'choose-btn'));
   $form->addField($field);
 
-  $output .= htmlWrap('div', $form, ['class' => ['image-converter-form']]);
+//  $output .= htmlWrap('div', $form, ['class' => ['image-converter-form']]);
 
-  $image_preview = htmlWrap('div', '', ['id' => 'preview-container']);
-  $output .= htmlWrap('div', $image_preview, ['class' => ['image-preview']]);
+  $image_preview = htmlWrap('div', '', array('id' => 'preview-container'));
+  $output .= htmlWrap('div', $image_preview, array('class' => array('image-preview')));
 
-  $options = [
+  $options = array(
     'png' => 'PNG',
     'jpeg' => 'JPEG',
-  ];
+  );
   $file_type_field = new FieldRadio('file-type', 'Select File Type');
   $file_type_field->setOptions($options);
   $file_type_field->setValue('png');
@@ -85,7 +83,7 @@ function imageConverterForm()
   $convert_btn = new FieldSubmit('convert-btn', 'Convert File');
   $form->addField($convert_btn);
 
-  $output .= htmlWrap('div', $file_type_field . $convert_btn, ['class' => ['image-converter-button']]);
+  $output .= htmlWrap('div', $form, ['class' => ['image-converter-button']]);
 
   // Initialize an array to store error messages
   $errorMessages = [];
@@ -113,10 +111,10 @@ function convertWebpToFormat($webpFile, $outputFormat)
   switch ($outputFormat)
   {
     case 'png':
-      imagepng($im, null, 9); // Adjusted compression level to 9
+      imagepng($im);
       break;
     case 'jpeg':
-      imagejpeg($im, null, 100);
+      imagejpeg($im);
       break;
   }
   // Get the buffered output and clean the buffer
