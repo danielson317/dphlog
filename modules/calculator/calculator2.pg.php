@@ -4,6 +4,7 @@ function calculator2Page()
 {
   $output = '';
   $output .= htmlWrap('script', '', array('src' => 'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'));
+//  $output .= htmlWrap('script', '', array('src' => '/modules/calculator/calculator2.js'));
   $output .= htmlWrap('script', file_get_contents(ROOT_PATH . '/modules/calculator/calculator2.js'));
   $output .= htmlWrap('style', file_get_contents(ROOT_PATH . '/modules/calculator/calculator2.css'));
   $output .= '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
@@ -11,9 +12,10 @@ function calculator2Page()
   /*****************************
    *   Header
    *****************************/
-  $header = htmlWrap('span', htmlWrap('span', '', array('class' => array('logo'))), array('class' => array('label', 'qemr'))); //'QuickEMR'
-  $header .= htmlWrap('div', '', array('class' => array('operation')));
+  $header = htmlWrap('div', '', array('class' => array('operation')));
+  $header .= htmlWrap('span', htmlWrap('span', '', array('class' => array('logo'))), array('class' => array('label', 'qemr'))); //'QuickEMR'
   $header .= htmlWrap('span', 'WebPT', array('class' => array('label', 'other')));
+  $header .= htmlWrap('span', 'PromptEMR', array('class' => array('label', 'other2')));
 
   $header = htmlWrap('div', $header, array('class' => array('header')));
 
@@ -26,9 +28,10 @@ function calculator2Page()
   $left = htmlWrap('div', 'Full Time Providers', array('class' => array('service')));
 //  $left = htmlWrap('div', $left, array('class' => array('left')));
 
-  $right = htmlWrap('div', '$0.00', array('id' => 'qemr-provider-value', 'class' => array('qemr', 'amount')));
-  $right .= htmlWrap('div', fieldNumber('full_time_provider', 1), array('class' => array('operation')));
+  $right = htmlWrap('div', fieldNumber('full_time_provider', 1), array('class' => array('operation')));
+  $right .= htmlWrap('div', '$0.00', array('id' => 'qemr-provider-value', 'class' => array('qemr', 'amount')));
   $right .= htmlWrap('div', '$0.00', array('id' => 'other-provider-value', 'class' => array('other', 'amount')));
+  $right .= htmlWrap('div', '$0.00', array('id' => 'other2-provider-value', 'class' => array('other2', 'amount')));
   $right = htmlWrap('div', $right, array('class' => array('right')));
   $body .= htmlWrap('div', $left . $right, array('class' => array('provider-info', 'price-line')));
 
@@ -36,9 +39,10 @@ function calculator2Page()
   $left = htmlWrap('div', 'Part Time Providers', array('class' => array('service')));
 //  $left = htmlWrap('div', $left, array('class' => array('left')));
 
-  $right = htmlWrap('div', '$0.00', array('id' => 'qemr-pt-provider-value', 'class' => array('qemr', 'amount')));
-  $right .= htmlWrap('div', fieldNumber('part_time_provider'), array('class' => array('operation')));
+  $right = htmlWrap('div', fieldNumber('part_time_provider'), array('class' => array('operation')));
+  $right .= htmlWrap('div', '$0.00', array('id' => 'qemr-pt-provider-value', 'class' => array('qemr', 'amount')));
   $right .= htmlWrap('div', '$0.00', array('id' => 'other-pt-provider-value', 'class' => array('other', 'amount')));
+  $right .= htmlWrap('div', '$0.00', array('id' => 'other2-pt-provider-value', 'class' => array('other2', 'amount')));
   $right = htmlWrap('div', $right, array('class' => array('right')));
   $body .= htmlWrap('div', $left . $right, array('class' => array('pt-provider-info', 'price-line')));
 
@@ -46,9 +50,10 @@ function calculator2Page()
   $left = htmlWrap('div', 'Non-Provider Users', array('class' => array('service')));
 //  $left = htmlWrap('div', $left, array('class' => array('left')));
 
-  $right = htmlWrap('div', '$0.00', array('id' => 'qemr-support-value', 'class' => array('qemr', 'amount')));
-  $right .= htmlWrap('div', fieldNumber('support'), array('class' => array('operation')));
+  $right = htmlWrap('div', fieldNumber('support'), array('class' => array('operation')));
+  $right .= htmlWrap('div', '$0.00', array('id' => 'qemr-support-value', 'class' => array('qemr', 'amount')));
   $right .= htmlWrap('div', '$0.00', array('id' => 'other-support-value', 'class' => array('other', 'amount')));
+  $right .= htmlWrap('div', '$0.00', array('id' => 'other2-support-value', 'class' => array('other2', 'amount')));
   $right = htmlWrap('div', $right, array('class' => array('right')));
   $body .= htmlWrap('div', $left . $right, array('class' => array('support-info', 'price-line')));
 
@@ -64,34 +69,36 @@ function calculator2Page()
   $connect_input = htmlWrap('label', $connect_input, array('class' => array('switch')));
 //  $left = htmlWrap('div', $left, array('class' => array('left')));
 
-  $right = htmlWrap('div', '$0.00', array('id' => 'qemr-connect-value', 'class' => array('qemr', 'amount')));
-  $right .= htmlWrap('div', $connect_input, array('class' => array('operation')));
+  $right = htmlWrap('div', $connect_input, array('class' => array('operation')));
+  $right .= htmlWrap('div', '$0.00', array('id' => 'qemr-connect-value', 'class' => array('qemr', 'amount')));
   $right .= htmlWrap('div', '$0.00', array('id' => 'other-connect-value', 'class' => array('other', 'amount')));
+  $right .= htmlWrap('div', '$0.00', array('id' => 'other2-connect-value', 'class' => array('other2', 'amount')));
   $right = htmlWrap('div', $right, array('class' => array('right')));
   $body .= htmlWrap('div', $left . $right, array('class' => array('connect-info', 'price-line')));
 
   // Reminder calls.
-  $left = htmlWrap('div', 'Reminder Calls', array('class' => array('service')));
+  $left = htmlWrap('div', 'Reminder Calls/Texts', array('class' => array('service')));
 //  $left = htmlWrap('div', $left, array('class' => array('left')));
 
-  $right = htmlWrap('div', '$0.00', array('id' => 'qemr-calls-value', 'class' => array('qemr', 'amount')));
-  $right .= htmlWrap('div', fieldNumber('reminder_calls', 0, 50), array('class' => array('operation')));
+  $right = htmlWrap('div', fieldNumber('reminder_calls', 0, 50), array('class' => array('operation')));
+  $right .= htmlWrap('div', '$0.00', array('id' => 'qemr-calls-value', 'class' => array('qemr', 'amount')));
   $right .= htmlWrap('div', '$0.00', array('id' => 'other-calls-value', 'class' => array('other', 'amount')));
+  $right .= htmlWrap('div', '$0.00', array('id' => 'other2-calls-value', 'class' => array('other2', 'amount')));
   $right = htmlWrap('div', $right, array('class' => array('right')));
   $body .= htmlWrap('div', $left . $right, array('class' => array('calls-info', 'price-line')));
 
   // Total.
 //  $left = htmlWrap('div', $left, array('class' => array('left')));
 
-  $right = htmlWrap('div', '$69.00', array('class' => array('qemr', 'amount')));
-  $right .= htmlWrap('div', '', array('class' => array('operation')));
-//  $right .= htmlWrap('div', '', array('class' => array('operation')));
-  $right .= htmlWrap('div', '$180.00', array('class' => array('other', 'amount')));
+  $right = htmlWrap('div', '', array('class' => array('operation')));
+  $right .= htmlWrap('div', '$69.00', array('id' => 'qemr-total', 'class' => array('qemr', 'amount')));
+  $right .= htmlWrap('div', '$180.00', array('id' => 'other-total', 'class' => array('other', 'amount')));
+  $right .= htmlWrap('div', '$180.00', array('id' => 'other2-total', 'class' => array('other2', 'amount')));
   $right = htmlWrap('div', $right, array('class' => array('right')));
   $body .= htmlWrap('div', $right, array('class' => array('totals', 'price-line')));
 
   // Savings.
-  $footer = htmlWrap('div', 'Save ' . htmlWrap('span', '$111.00', array('class' => array('saved'))) . ' per month!', array('class' => array('savings', 'price-line')));
+  $footer = htmlWrap('div', 'Save up to ' . htmlWrap('span', '$111.00', array('class' => array('saved'))) . ' per month!', array('class' => array('savings', 'price-line')));
 
   // Combine items.
   $output .= htmlWrap('div', $header . $body . $footer, array('id' => 'price_calculator'));
