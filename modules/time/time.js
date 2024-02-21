@@ -121,8 +121,9 @@ function clockStep()
 
     // If timestamp is empty, use input from date/time section.
     if (timestamp === "")
-    { //default timezone to user setting
-      datetime = parseDateTimeInputData(time_value, date_value, setValue($user['timezone']));
+    {
+      //default timezone to user setting
+      datetime = parseDateTimeInputData(time_value, date_value, timezone);
       date_time = new Intl.DateTimeFormat('en-US', options).format(datetime);
 
       epoch = Math.floor(datetime.getTime() / 1000);
