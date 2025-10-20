@@ -1,12 +1,12 @@
 <div id="price_calculator">
-  <script>$(document).ready(function()
+  <script>$(document).ready(function ()
   {
     // CONSTANTS - Prices.
-    const QEMR_FULL_TIME_PRICE = 69;
+    const QEMR_FULL_TIME_PRICE = 79;
     const OTHER_FULL_TIME_PRICE = 180;
     const OTHER2_FULL_TIME_PRICE = 289;
 
-    const QEMR_PART_TIME_PRICE = 35;
+    const QEMR_PART_TIME_PRICE = 40;
     const OTHER_PART_TIME_PRICE = 180;
     const OTHER2_PART_TIME_PRICE = 199;
 
@@ -18,7 +18,7 @@
     const OTHER_CONNECT_PRICE = 399;
     const OTHER2_CONNECT_PRICE = 0;
 
-    const QEMR_CALL_PRICE = 0.12;
+    const QEMR_CALL_PRICE = 0.14;
     const OTHER_CALL_PRICE = 0.21;
     const OTHER2_CALL_PRICE = 0;
 
@@ -73,7 +73,7 @@
     let other2_calls_amount = 0;
 
     // On totals refresh.
-    $totals_row.on("refresh", function()
+    $totals_row.on("refresh", function ()
     {
       let qemr_total = (qemr_ft_amount + qemr_pt_amount + qemr_calls_amount + qemr_support_amount + qemr_connect_amount);
       $totals_row.find(".qemr").text("$" + qemr_total.toFixed(2));
@@ -90,7 +90,7 @@
     });
 
     // Full time provider cells.
-    $full_time_provider_input.change(function()
+    $full_time_provider_input.change(function ()
     {
       qemr_ft_amount = calculatePrices($full_time_provider_input, QEMR_FULL_TIME_PRICE, $qemr_provider_value);
       other_ft_amount = calculatePrices($full_time_provider_input, OTHER_FULL_TIME_PRICE, $other_provider_value);
@@ -99,7 +99,7 @@
     }).change();
 
     // Part time provicer cells.
-    $part_time_provider_input.change(function()
+    $part_time_provider_input.change(function ()
     {
       qemr_pt_amount = calculatePrices($part_time_provider_input, QEMR_PART_TIME_PRICE, $qemr_pt_provider_value);
       other_pt_amount = calculatePrices($part_time_provider_input, OTHER_PART_TIME_PRICE, $other_pt_provider_value);
@@ -109,7 +109,7 @@
 
 
     // Support Personnel cells.
-    $support_input.change(function()
+    $support_input.change(function ()
     {
       qemr_support_amount = calculatePrices($support_input, QEMR_SUPPORT_PRICE, $qemr_support_value);
       other_support_amount = calculatePrices($support_input, OTHER_SUPPORT_PRICE, $other_support_value);
@@ -121,7 +121,7 @@
     // $qemr_connect_value.text("$" + QEMR_CONNECT_PRICE.toFixed(2));
     // $other_connect_value.text("$" + OTHER_CONNECT_PRICE.toFixed(2));
 
-    $connect_input.click(function()
+    $connect_input.click(function ()
     {
       if ($connect_input.is(":checked"))
       {
@@ -144,7 +144,7 @@
     });
 
     // Reminder calls cells.
-    $reminder_calls_input.change(function()
+    $reminder_calls_input.change(function ()
     {
       qemr_calls_amount = calculatePrices($reminder_calls_input, QEMR_CALL_PRICE, $qemr_reminder_calls_value);
       other_calls_amount = calculatePrices($reminder_calls_input, OTHER_CALL_PRICE, $other_reminder_calls_value);
@@ -152,12 +152,12 @@
       $totals_row.trigger("refresh");
     }).change();
 
-    $('.number-field-wrapper').each(function()
+    $('.number-field-wrapper').each(function ()
     {
       let $this = $(this);
       let $value = $this.find('input.value');
       let $increment = parseInt($value.attr('increment'));
-      $this.find('.minus').click(function()
+      $this.find('.minus').click(function ()
       {
         if ($value.val() <= parseInt($value.attr('min')))
         {
@@ -168,7 +168,7 @@
         $value.change();
       });
 
-      $this.find('.plus').click(function()
+      $this.find('.plus').click(function ()
       {
         $value.val(parseInt($value.val()) + $increment);
         $value.change();
@@ -198,6 +198,7 @@
     font-family: Montserrat, arial, sans-serif;
     font-size: 18px;
   }
+
   body
   {
     background-color: #FFFFFF;
@@ -214,9 +215,10 @@
    ***********************/
   #price_calculator .price-line
   {
-    display:flex;
+    display: flex;
     flex-flow: column;
   }
+
   #price_calculator .price-line .operation
   {
     width: 155px;
@@ -232,6 +234,7 @@
     margin-left: 10px;
     /*justify-content: center;*/
   }
+
   #price_calculator .operation
   {
     margin: 0 auto 0 10px;
@@ -307,6 +310,7 @@
     filter: drop-shadow(0px 2px 2px #999);
     /*border-radius: 3px;*/
   }
+
   #price_calculator .header .label.qemr .logo
   {
     display: block;
@@ -365,6 +369,7 @@
     display: flex;
     justify-content: center;
   }
+
   #price_calculator .number-field-wrapper input.value
   {
     width: 45px;
@@ -387,6 +392,7 @@
     background-position: center center;
     background-repeat: no-repeat;
   }
+
   #price_calculator .number-field-wrapper input.plus
   {
     background-image: url(data:image/png;base64,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);
@@ -398,7 +404,8 @@
   }
 
   /* The switch - the box around the slider */
-  #price_calculator .switch {
+  #price_calculator .switch
+  {
     position: relative;
     display: inline-block;
     width: 105px;
@@ -406,14 +413,16 @@
   }
 
   /* Hide default HTML checkbox */
-  #price_calculator .switch input {
+  #price_calculator .switch input
+  {
     opacity: 0;
     width: 0;
     height: 0;
   }
 
   /* The slider */
-  #price_calculator .slider {
+  #price_calculator .slider
+  {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -425,7 +434,8 @@
     transition: .4s;
   }
 
-  #price_calculator .slider:before {
+  #price_calculator .slider:before
+  {
     position: absolute;
     content: "";
     height: 26px;
@@ -437,28 +447,119 @@
     transition: .4s;
   }
 
-  #price_calculator input:checked + .slider {
+  #price_calculator input:checked + .slider
+  {
     background-color: #2196F3;
   }
 
-  #price_calculator input:focus + .slider {
+  #price_calculator input:focus + .slider
+  {
     box-shadow: 0 0 1px #2196F3;
   }
 
-  #price_calculator input:checked + .slider:before {
+  #price_calculator input:checked + .slider:before
+  {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(26px);
   }
 
   /* Rounded sliders */
-  #price_calculator .slider.round {
+  #price_calculator .slider.round
+  {
     border-radius: 34px;
-    width:60px;
+    width: 60px;
   }
 
-  #price_calculator .slider.round:before {
+  #price_calculator .slider.round:before
+  {
     border-radius: 50%;
   }</style>
 
-  <div class="header"><div class="operation"></div><span class="label qemr"><span class="logo"></span></span><span class="label other">WebPT</span><span class="label other2">PromptEMR</span></div><div class="provider-info price-line"><div class="service">Full Time Providers</div><div class="right"><div class="operation"><div id="full_time_provider" class="number-field-wrapper"><input type="button" value="" class="minus operator"><input type="textfield" min="1" value="1" increment="1" class="value"><input type="button" value="" class="plus operator"></div></div><div id="qemr-provider-value" class="qemr amount">$1104.00</div><div id="other-provider-value" class="other amount">$2880.00</div><div id="other2-provider-value" class="other2 amount">$4624.00</div></div></div><div class="pt-provider-info price-line"><div class="service">Part Time Providers</div><div class="right"><div class="operation"><div id="part_time_provider" class="number-field-wrapper"><input type="button" value="" class="minus operator"><input type="textfield" min="0" value="0" increment="1" class="value"><input type="button" value="" class="plus operator"></div></div><div id="qemr-pt-provider-value" class="qemr amount">$0.00</div><div id="other-pt-provider-value" class="other amount">$0.00</div><div id="other2-pt-provider-value" class="other2 amount">$0.00</div></div></div><div class="support-info price-line"><div class="service">Non-Provider Users</div><div class="right"><div class="operation"><div id="support" class="number-field-wrapper"><input type="button" value="" class="minus operator"><input type="textfield" min="0" value="0" increment="1" class="value"><input type="button" value="" class="plus operator"></div></div><div id="qemr-support-value" class="qemr amount">$0.00</div><div id="other-support-value" class="other amount">$0.00</div><div id="other2-support-value" class="other2 amount">$0.00</div></div></div><div class="connect-info price-line"><div class="service">Connect/Reach Patients</div><div class="right"><div class="operation"><label class="switch"><input type="checkbox" id="connect-input" class="conversion-inputs"><span class="slider round"></span></label></div><div id="qemr-connect-value" class="qemr amount">$0.00</div><div id="other-connect-value" class="other amount">$0.00</div><div id="other2-connect-value" class="other2 amount">$0.00</div></div></div><div class="calls-info price-line"><div class="service">Reminder Calls/Texts</div><div class="right"><div class="operation"><div id="reminder_calls" class="number-field-wrapper"><input type="button" value="" class="minus operator"><input type="textfield" min="0" value="0" increment="50" class="value"><input type="button" value="" class="plus operator"></div></div><div id="qemr-calls-value" class="qemr amount">$0.00</div><div id="other-calls-value" class="other amount">$0.00</div><div id="other2-calls-value" class="other2 amount">$0.00</div></div></div><div class="totals price-line"><div class="right"><div class="operation"></div><div id="qemr-total" class="qemr amount">$1104.00</div><div id="other-total" class="other amount">$2880.00</div><div id="other2-total" class="other2 amount">$4624.00</div></div></div><div class="savings price-line">Save up to <span class="saved">$3520.00</span> per month!</div></div>
+  <div class="header">
+    <div class="operation"></div>
+    <span class="label qemr"><span class="logo"></span></span><span class="label other">WebPT</span><span class="label other2">PromptEMR</span>
+  </div>
+  <div class="provider-info price-line">
+    <div class="service">Full Time Providers</div>
+    <div class="right">
+      <div class="operation">
+        <div id="full_time_provider" class="number-field-wrapper">
+          <input type="button" value="" class="minus operator">
+          <input type="textfield" min="1" value="1" increment="1" class="value">
+          <input type="button" value="" class="plus operator">
+        </div>
+      </div>
+      <div id="qemr-provider-value" class="qemr amount">$1104.00</div>
+      <div id="other-provider-value" class="other amount">$2880.00</div>
+<!--      <div id="other2-provider-value" class="other2 amount">$4624.00</div>-->
+    </div>
+  </div>
+  <div class="pt-provider-info price-line">
+    <div class="service">Part Time Providers</div>
+    <div class="right">
+      <div class="operation">
+        <div id="part_time_provider" class="number-field-wrapper">
+          <input type="button" value="" class="minus operator">
+          <input type="textfield" min="0" value="0" increment="1" class="value">
+          <input type="button" value="" class="plus operator">
+        </div>
+      </div>
+      <div id="qemr-pt-provider-value" class="qemr amount">$0.00</div>
+      <div id="other-pt-provider-value" class="other amount">$0.00</div>
+<!--      <div id="other2-pt-provider-value" class="other2 amount">$0.00</div>-->
+    </div>
+  </div>
+  <div class="support-info price-line">
+    <div class="service">Non-Provider Users</div>
+    <div class="right">
+      <div class="operation">
+        <div id="support" class="number-field-wrapper">
+          <input type="button" value="" class="minus operator">
+          <input type="textfield" min="0" value="0" increment="1" class="value">
+          <input type="button" value="" class="plus operator">
+        </div>
+      </div>
+      <div id="qemr-support-value" class="qemr amount">$0.00</div>
+      <div id="other-support-value" class="other amount">$0.00</div>
+<!--      <div id="other2-support-value" class="other2 amount">$0.00</div>-->
+    </div>
+  </div>
+  <div class="connect-info price-line">
+    <div class="service">Connect/Reach Patients</div>
+    <div class="right">
+      <div class="operation">
+        <label class="switch">
+          <input type="checkbox" id="connect-input" class="conversion-inputs">
+          <span class="slider round"></span></label>
+      </div>
+      <div id="qemr-connect-value" class="qemr amount">$0.00</div>
+      <div id="other-connect-value" class="other amount">$0.00</div>
+<!--      <div id="other2-connect-value" class="other2 amount">$0.00</div>-->
+    </div>
+  </div>
+  <div class="calls-info price-line">
+    <div class="service">Reminder Calls/Texts</div>
+    <div class="right">
+      <div class="operation">
+        <div id="reminder_calls" class="number-field-wrapper">
+          <input type="button" value="" class="minus operator">
+          <input type="textfield" min="0" value="0" increment="50" class="value">
+          <input type="button" value="" class="plus operator">
+        </div>
+      </div>
+      <div id="qemr-calls-value" class="qemr amount">$0.00</div>
+      <div id="other-calls-value" class="other amount">$0.00</div>
+<!--      <div id="other2-calls-value" class="other2 amount">$0.00</div>-->
+    </div>
+  </div>
+  <div class="totals price-line">
+    <div class="right">
+      <div class="operation"></div>
+      <div id="qemr-total" class="qemr amount">$1104.00</div>
+      <div id="other-total" class="other amount">$2880.00</div>
+<!--      <div id="other2-total" class="other2 amount">$4624.00</div>-->
+    </div>
+  </div>
+  <div class="savings price-line">Save up to <span class="saved">$3520.00</span> per month!</div>
+</div>
