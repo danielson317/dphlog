@@ -1,21 +1,28 @@
+<html><head><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script></head>
+
 <div id="price_calculator">
-  <script>$(document).ready(function()
+  <script>$(document).ready(function ()
   {
     // CONSTANTS - Prices.
-    const QEMR_FULL_TIME_PRICE = 69;
+    const QEMR_FULL_TIME_PRICE = 79;
     const OTHER_FULL_TIME_PRICE = 180;
+    const OTHER2_FULL_TIME_PRICE = 289;
 
-    const QEMR_PART_TIME_PRICE = 35;
+    const QEMR_PART_TIME_PRICE = 40;
     const OTHER_PART_TIME_PRICE = 180;
+    const OTHER2_PART_TIME_PRICE = 199;
 
     const QEMR_SUPPORT_PRICE = 0;
     const OTHER_SUPPORT_PRICE = 59;
+    const OTHER2_SUPPORT_PRICE = 0;
 
     const QEMR_CONNECT_PRICE = 0;
     const OTHER_CONNECT_PRICE = 399;
+    const OTHER2_CONNECT_PRICE = 0;
 
-    const QEMR_CALL_PRICE = 0.12;
+    const QEMR_CALL_PRICE = 0.14;
     const OTHER_CALL_PRICE = 0.21;
+    const OTHER2_CALL_PRICE = 0;
 
     let $price_calculator = $('#price_calculator');
 
@@ -23,22 +30,27 @@
     let $full_time_provider_input = $price_calculator.find("#full_time_provider input.value");
     let $qemr_provider_value = $price_calculator.find("#qemr-provider-value");
     let $other_provider_value = $price_calculator.find("#other-provider-value");
+    let $other2_provider_value = $price_calculator.find("#other2-provider-value");
 
     let $part_time_provider_input = $price_calculator.find("#part_time_provider input.value");
     let $qemr_pt_provider_value = $price_calculator.find("#qemr-pt-provider-value");
     let $other_pt_provider_value = $price_calculator.find("#other-pt-provider-value");
+    let $other2_pt_provider_value = $price_calculator.find("#other2-pt-provider-value");
 
     let $support_input = $price_calculator.find("#support input.value");
     let $qemr_support_value = $price_calculator.find("#qemr-support-value");
     let $other_support_value = $price_calculator.find("#other-support-value");
+    let $other2_support_value = $price_calculator.find("#other2-support-value");
 
     let $connect_input = $price_calculator.find("#connect-input");
     let $qemr_connect_value = $price_calculator.find("#qemr-connect-value");
     let $other_connect_value = $price_calculator.find("#other-connect-value");
+    let $other2_connect_value = $price_calculator.find("#other2-connect-value");
 
     let $reminder_calls_input = $price_calculator.find("#reminder_calls input.value");
     let $qemr_reminder_calls_value = $price_calculator.find("#qemr-calls-value");
     let $other_reminder_calls_value = $price_calculator.find("#other-calls-value");
+    let $other2_reminder_calls_value = $price_calculator.find("#other2-calls-value");
 
     let $totals_row = $price_calculator.find(".totals");
     let $savings_row = $price_calculator.find(".savings");
@@ -56,39 +68,54 @@
     let other_connect_amount = 0
     let other_calls_amount = 0;
 
+    let other2_ft_amount = 0;
+    let other2_pt_amount = 0;
+    let other2_support_amount = 0;
+    let other2_connect_amount = 0
+    let other2_calls_amount = 0;
+
     // On totals refresh.
-    $totals_row.on("refresh", function()
+    $totals_row.on("refresh", function ()
     {
-      let total = (qemr_ft_amount + qemr_pt_amount + qemr_calls_amount + qemr_support_amount + qemr_connect_amount);
-      $totals_row.find(".qemr").text("$" + total.toFixed(2));
+      let qemr_total = (qemr_ft_amount + qemr_pt_amount + qemr_calls_amount + qemr_support_amount + qemr_connect_amount);
+      $totals_row.find(".qemr").text("$" + qemr_total.toFixed(2));
+
       let other_total = other_ft_amount + other_pt_amount + other_calls_amount + other_support_amount + other_connect_amount;
       $totals_row.find(".other").text("$" + other_total.toFixed(2));
-      let savings = other_total - total;
-      $savings_row.find(".saved").text("$" + savings.toFixed(2));
+
+      let other2_total = other2_ft_amount + other2_pt_amount + other2_calls_amount + other2_support_amount + other2_connect_amount;
+      $totals_row.find(".other2").text("$" + other2_total.toFixed(2));
+
+      let savings = other_total - qemr_total;
+      let savings2 = other2_total - qemr_total;
+      $savings_row.find(".saved").text("$" + Math.max(savings, savings2).toFixed(2));
     });
 
     // Full time provider cells.
-    $full_time_provider_input.change(function()
+    $full_time_provider_input.change(function ()
     {
       qemr_ft_amount = calculatePrices($full_time_provider_input, QEMR_FULL_TIME_PRICE, $qemr_provider_value);
       other_ft_amount = calculatePrices($full_time_provider_input, OTHER_FULL_TIME_PRICE, $other_provider_value);
+      other2_ft_amount = calculatePrices($full_time_provider_input, OTHER2_FULL_TIME_PRICE, $other2_provider_value);
       $totals_row.trigger("refresh");
     }).change();
 
     // Part time provicer cells.
-    $part_time_provider_input.change(function()
+    $part_time_provider_input.change(function ()
     {
       qemr_pt_amount = calculatePrices($part_time_provider_input, QEMR_PART_TIME_PRICE, $qemr_pt_provider_value);
       other_pt_amount = calculatePrices($part_time_provider_input, OTHER_PART_TIME_PRICE, $other_pt_provider_value);
+      other2_pt_amount = calculatePrices($part_time_provider_input, OTHER2_PART_TIME_PRICE, $other2_pt_provider_value);
       $totals_row.trigger("refresh");
     }).change();
 
 
     // Support Personnel cells.
-    $support_input.change(function()
+    $support_input.change(function ()
     {
       qemr_support_amount = calculatePrices($support_input, QEMR_SUPPORT_PRICE, $qemr_support_value);
       other_support_amount = calculatePrices($support_input, OTHER_SUPPORT_PRICE, $other_support_value);
+      other2_support_amount = calculatePrices($support_input, OTHER2_SUPPORT_PRICE, $other2_support_value);
       $totals_row.trigger("refresh");
     }).change();
 
@@ -96,39 +123,43 @@
     // $qemr_connect_value.text("$" + QEMR_CONNECT_PRICE.toFixed(2));
     // $other_connect_value.text("$" + OTHER_CONNECT_PRICE.toFixed(2));
 
-    $connect_input.click(function()
+    $connect_input.click(function ()
     {
       if ($connect_input.is(":checked"))
       {
         qemr_connect_amount = QEMR_CONNECT_PRICE;
         other_connect_amount = OTHER_CONNECT_PRICE;
+        other2_connect_amount = OTHER2_CONNECT_PRICE;
       }
       else
       {
         qemr_connect_amount = 0;
         other_connect_amount = 0;
+        other2_connect_amount = 0;
       }
 
       $qemr_connect_value.text("$" + qemr_connect_amount.toFixed(2));
       $other_connect_value.text("$" + other_connect_amount.toFixed(2));
+      $other2_connect_value.text("$" + other2_connect_amount.toFixed(2));
 
       $totals_row.trigger("refresh");
     });
 
     // Reminder calls cells.
-    $reminder_calls_input.change(function()
+    $reminder_calls_input.change(function ()
     {
       qemr_calls_amount = calculatePrices($reminder_calls_input, QEMR_CALL_PRICE, $qemr_reminder_calls_value);
       other_calls_amount = calculatePrices($reminder_calls_input, OTHER_CALL_PRICE, $other_reminder_calls_value);
+      other2_calls_amount = calculatePrices($reminder_calls_input, OTHER2_CALL_PRICE, $other2_reminder_calls_value);
       $totals_row.trigger("refresh");
     }).change();
 
-    $('.number-field-wrapper').each(function()
+    $('.number-field-wrapper').each(function ()
     {
       let $this = $(this);
       let $value = $this.find('input.value');
       let $increment = parseInt($value.attr('increment'));
-      $this.find('.minus').click(function()
+      $this.find('.minus').click(function ()
       {
         if ($value.val() <= parseInt($value.attr('min')))
         {
@@ -139,7 +170,7 @@
         $value.change();
       });
 
-      $this.find('.plus').click(function()
+      $this.find('.plus').click(function ()
       {
         $value.val(parseInt($value.val()) + $increment);
         $value.change();
@@ -161,340 +192,377 @@
     return amount;
   }
   </script>
-  <style>/***********************
- * Global
- ***********************/
-  *
-  {
-    font-family: Montserrat, arial, sans-serif;
-    font-size: 18px;
-  }
-  body
-  {
-    background-color: #FFFFFF;
-  }
+  <style>
+    /***********************
+     * Global
+     ***********************/
+    *
+    {
+      font-family: Montserrat, arial, sans-serif;
+      font-size: 18px;
+    }
 
-  #price_calculator
-  {
-    margin-top: 20px;
-    max-width: 595px;
-  }
+    body
+    {
+      background-color: #FFFFFF;
+    }
 
-  /***********************
-   * General
-   ***********************/
-  #price_calculator .price-line
-  {
-    display:flex;
-    flex-flow: column;
-  }
+    #price_calculator
+    {
+      margin-top: 20px;
+      max-width: 595px;
+    }
 
-  #price_calculator .service
-  {
-    flex-grow: 1;
-    height: 40px;
+    /***********************
+     * General
+     ***********************/
+    #price_calculator .price-line
+    {
+      display: flex;
+      flex-flow: column;
+    }
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  #price_calculator .operation
-  {
-    flex-basis: 100px;
-    flex-grow: 1;
-    height: 30px;
+    #price_calculator .price-line .operation
+    {
+      width: 155px;
+    }
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    #price_calculator .service
+    {
+      flex-grow: 1;
+      height: 40px;
 
-    /*border-width: 0 2px 0 2px;*/
-    /*border-style: dashed;*/
-    /*border-color: #666;*/
+      display: flex;
+      align-items: center;
+      margin-left: 10px;
+      /*justify-content: center;*/
+    }
 
-    margin: 5px 0;
-  }
+    #price_calculator .operation
+    {
+      margin: 0 auto 0 10px;
+      /*flex-basis: 100px;*/
+      /*flex-grow: 1;*/
+      height: 30px;
 
-  #price_calculator .right
-  {
-    flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    display: flex;
-    flex-wrap: nowrap;
-    height: 40px;
-  }
+      /*border-width: 0 2px 0 2px;*/
+      /*border-style: dashed;*/
+      /*border-color: #666;*/
 
-  #price_calculator .amount
-  {
-    flex-basis: 100px;
-    flex-grow: 1;
-    justify-content: center;
+      /*margin: 5px 0;*/
+    }
 
-    display: flex;
-    align-items: center;
-    height: 40px;
-  }
+    #price_calculator .right
+    {
+      flex-grow: 1;
 
-  /***********************
-   * Specific
-   ***********************/
+      display: flex;
+      flex-wrap: nowrap;
+      height: 40px;
+    }
 
-  /* Header */
-  #price_calculator .header
-  {
-    display: flex;
-  }
+    #price_calculator .amount
+    {
+      width: 120px;
+      /*flex-basis: 100px;*/
+      /*flex-grow: 1;*/
+      justify-content: center;
 
-  #price_calculator .header .label
-  {
-    height: 40px;
-    flex-basis: 100px;
-    flex-grow: 1;
+      display: flex;
+      align-items: center;
+      height: 40px;
+    }
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    #price_calculator .other.amount
+    {
+      border-right: 1px dotted gray;
+      border-left: 1px dotted gray;
+    }
 
-    font-weight: 700;
-  }
+    /***********************
+     * Specific
+     ***********************/
 
-  #price_calculator .header .label.qemr
-  {
-    /*color: transparent;*/
-    /*color: #FFE;*/
-    background-color: #EDA225;
-    filter: drop-shadow(0px 0px 8px #555);
-    /*border-radius: 3px;*/
-  }
-  #price_calculator .header .label.qemr .logo
-  {
-    display: block;
-    height: 40px;
-    width: 120px;
-    background: center center url('data:image/png;base64,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') no-repeat;
-    /*filter: drop-shadow(0px 0px 4px #444);*/
-    /*text-shadow: 0px 0px 4px #444;*/
-  }
+    /* Header */
+    #price_calculator .header
+    {
+      display: flex;
+    }
 
-  #price_calculator .header .operation
-  {
-    height: 30px;
-    flex-basis: 100px;
-    flex-grow: 1;
-  }
+    #price_calculator .header .label
+    {
+      width: 120px;
+      height: 40px;
 
-  /* Striping */
-  .pt-provider-info,
-  .connect-info,
-  .totals
-  {
-    background-color: #BBBDF6;
-  }
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-  /* Totals */
-  #price_calculator .totals
-  {
-    font-weight: 700;
-  }
+      font-weight: 700;
+    }
 
-  /* Savings */
-  #price_calculator .savings
-  {
-    flex-direction: row;
+    #price_calculator .header .label.qemr
+    {
+      /*color: transparent;*/
+      /*color: #FFE;*/
+      /*background-color: #EDA225;*/
+      filter: drop-shadow(0px 2px 2px #999);
+      /*border-radius: 3px;*/
+    }
 
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 700;
-  }
+    #price_calculator .header .label.qemr .logo
+    {
+      display: block;
+      height: 40px;
+      width: 120px;
+      background: center center url('data:image/png;base64,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') no-repeat;
+      /*filter: drop-shadow(0px 0px 4px #444);*/
+      /*text-shadow: 0px 0px 4px #444;*/
+    }
 
-  #price_calculator .savings .saved
-  {
-    font-size: 22px;
-    color: #08A2A4;
-    padding: 0 4px;
-  }
+    #price_calculator .header .operation
+    {
+      height: 30px;
+      flex-basis: 100px;
+      flex-grow: 1;
+    }
 
-  /***********************
-   * Fields
-   ***********************/
-  #price_calculator .number-field-wrapper
-  {
-    display: flex;
-    justify-content: flex-end;
-  }
-  #price_calculator .number-field-wrapper input.value
-  {
-    width: 40px;
-    height: 30px;
-    text-align: center;
-    border: none;
-    background-color: transparent;
-    font-size: 18px;
-    outline: none;
-  }
+    /* Striping */
+    .pt-provider-info,
+    .connect-info,
+    .totals
+    {
+      background-color: #BBBDF6;
+    }
 
-  #price_calculator .number-field-wrapper input.minus,
-  #price_calculator .number-field-wrapper input.plus
-  {
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
-    background-color: #DDD;
-    border: none;
-    background-position: center center;
-    background-repeat: no-repeat;
-  }
-  #price_calculator .number-field-wrapper input.plus
-  {
-    background-image: url(data:image/png;base64,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);
-  }
+    /* Totals */
+    #price_calculator .totals
+    {
+      font-weight: 700;
+    }
 
-  #price_calculator .number-field-wrapper input.minus
-  {
-    background-image: url(data:image/png;base64,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);
-  }
+    /* Savings */
+    #price_calculator .savings
+    {
+      flex-direction: row;
 
-  /* The switch - the box around the slider */
-  #price_calculator .switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-  }
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+    }
 
-  /* Hide default HTML checkbox */
-  #price_calculator .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
+    #price_calculator .savings .saved
+    {
+      font-size: 22px;
+      color: #08A2A4;
+      padding: 0 4px;
+    }
 
-  /* The slider */
-  #price_calculator .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
+    /***********************
+     * Fields
+     ***********************/
+    #price_calculator .number-field-wrapper
+    {
+      display: flex;
+      justify-content: center;
+    }
 
-  #price_calculator .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
+    #price_calculator .number-field-wrapper input.value
+    {
+      width: 45px;
+      height: 30px;
+      text-align: center;
+      border: none;
+      background-color: transparent;
+      font-size: 18px;
+      outline: none;
+    }
 
-  #price_calculator input:checked + .slider {
-    background-color: #2196F3;
-  }
+    #price_calculator .number-field-wrapper input.minus,
+    #price_calculator .number-field-wrapper input.plus
+    {
+      width: 30px;
+      height: 30px;
+      border-radius: 15px;
+      background-color: #DDD;
+      border: none;
+      background-position: center center;
+      background-repeat: no-repeat;
+    }
 
-  #price_calculator input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-  }
+    #price_calculator .number-field-wrapper input.plus
+    {
+      background-image: url(data:image/png;base64,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);
+    }
 
-  #price_calculator input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-  }
+    #price_calculator .number-field-wrapper input.minus
+    {
+      background-image: url(data:image/png;base64,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);
+    }
 
-  /* Rounded sliders */
-  #price_calculator .slider.round {
-    border-radius: 34px;
-  }
+    /* The switch - the box around the slider */
+    #price_calculator .switch
+    {
+      position: relative;
+      display: inline-block;
+      width: 105px;
+      height: 34px;
+    }
 
-  #price_calculator .slider.round:before {
-    border-radius: 50%;
-  }</style>
-  <div class="header"><span class="label qemr"><span class="logo"></span></span>
+    /* Hide default HTML checkbox */
+    #price_calculator .switch input
+    {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    /* The slider */
+    #price_calculator .slider
+    {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    #price_calculator .slider:before
+    {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    #price_calculator input:checked + .slider
+    {
+      background-color: #2196F3;
+    }
+
+    #price_calculator input:focus + .slider
+    {
+      box-shadow: 0 0 1px #2196F3;
+    }
+
+    #price_calculator input:checked + .slider:before
+    {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    #price_calculator .slider.round
+    {
+      border-radius: 34px;
+      width: 60px;
+    }
+
+    #price_calculator .slider.round:before
+    {
+      border-radius: 50%;
+    }</style>
+
+  <div class="header">
     <div class="operation"></div>
-    <span class="label other">WebPT</span></div>
+    <span class="label qemr"><span class="logo"></span></span><span class="label other">WebPT</span><span class="label other2">Other Guy</span>
+  </div>
   <div class="provider-info price-line">
     <div class="service">Full Time Providers</div>
     <div class="right">
-      <div class="qemr amount" id="qemr-provider-value">$69.00</div>
       <div class="operation">
-        <div class="number-field-wrapper" id="full_time_provider">
-          <input class="minus operator" type="button" value="">
-          <input class="value" increment="1" min="1" type="textfield" value="1">
-          <input class="plus operator" type="button" value="">
+        <div id="full_time_provider" class="number-field-wrapper">
+          <input type="button" value="" class="minus operator">
+          <input type="textfield" min="1" value="1" increment="1" class="value">
+          <input type="button" value="" class="plus operator">
         </div>
       </div>
-      <div class="other amount" id="other-provider-value">$180.00</div>
+      <div id="qemr-provider-value" class="qemr amount">$1104.00</div>
+      <div id="other-provider-value" class="other amount">$2880.00</div>
+      <div id="other2-provider-value" class="other2 amount">$4624.00</div>
     </div>
   </div>
   <div class="pt-provider-info price-line">
     <div class="service">Part Time Providers</div>
     <div class="right">
-      <div class="qemr amount" id="qemr-pt-provider-value">$0.00</div>
       <div class="operation">
-        <div class="number-field-wrapper" id="part_time_provider">
-          <input class="minus operator" type="button" value="">
-          <input class="value" increment="1" min="0" type="textfield" value="0">
-          <input class="plus operator" type="button" value="">
+        <div id="part_time_provider" class="number-field-wrapper">
+          <input type="button" value="" class="minus operator">
+          <input type="textfield" min="0" value="0" increment="1" class="value">
+          <input type="button" value="" class="plus operator">
         </div>
       </div>
-      <div class="other amount" id="other-pt-provider-value">$0.00</div>
+      <div id="qemr-pt-provider-value" class="qemr amount">$0.00</div>
+      <div id="other-pt-provider-value" class="other amount">$0.00</div>
+      <div id="other2-pt-provider-value" class="other2 amount">$0.00</div>
     </div>
   </div>
   <div class="support-info price-line">
     <div class="service">Non-Provider Users</div>
     <div class="right">
-      <div class="qemr amount" id="qemr-support-value">$0.00</div>
       <div class="operation">
-        <div class="number-field-wrapper" id="support">
-          <input class="minus operator" type="button" value="">
-          <input class="value" increment="1" min="0" type="textfield" value="0">
-          <input class="plus operator" type="button" value="">
+        <div id="support" class="number-field-wrapper">
+          <input type="button" value="" class="minus operator">
+          <input type="textfield" min="0" value="0" increment="1" class="value">
+          <input type="button" value="" class="plus operator">
         </div>
       </div>
-      <div class="other amount" id="other-support-value">$0.00</div>
+      <div id="qemr-support-value" class="qemr amount">$0.00</div>
+      <div id="other-support-value" class="other amount">$0.00</div>
+      <div id="other2-support-value" class="other2 amount">$0.00</div>
     </div>
   </div>
   <div class="connect-info price-line">
     <div class="service">Connect/Reach Patients</div>
     <div class="right">
-      <div class="qemr amount" id="qemr-connect-value">$0.00</div>
       <div class="operation">
         <label class="switch">
-          <input class="conversion-inputs" id="connect-input" type="checkbox">
+          <input type="checkbox" id="connect-input" class="conversion-inputs">
           <span class="slider round"></span></label>
       </div>
-      <div class="other amount" id="other-connect-value">$0.00</div>
+      <div id="qemr-connect-value" class="qemr amount">$0.00</div>
+      <div id="other-connect-value" class="other amount">$0.00</div>
+      <div id="other2-connect-value" class="other2 amount">$0.00</div>
     </div>
   </div>
   <div class="calls-info price-line">
-    <div class="service">Reminder Calls</div>
+    <div class="service">Reminder Calls/Texts</div>
     <div class="right">
-      <div class="qemr amount" id="qemr-calls-value">$0.00</div>
       <div class="operation">
-        <div class="number-field-wrapper" id="reminder_calls">
-          <input class="minus operator" type="button" value="">
-          <input class="value" increment="50" min="0" type="textfield" value="0">
-          <input class="plus operator" type="button" value="">
+        <div id="reminder_calls" class="number-field-wrapper">
+          <input type="button" value="" class="minus operator">
+          <input type="textfield" min="0" value="0" increment="50" class="value">
+          <input type="button" value="" class="plus operator">
         </div>
       </div>
-      <div class="other amount" id="other-calls-value">$0.00</div>
+      <div id="qemr-calls-value" class="qemr amount">$0.00</div>
+      <div id="other-calls-value" class="other amount">$0.00</div>
+      <div id="other2-calls-value" class="other2 amount">$0.00</div>
     </div>
   </div>
   <div class="totals price-line">
     <div class="right">
-      <div class="qemr amount">$69.00</div>
       <div class="operation"></div>
-      <div class="other amount">$180.00</div>
+      <div id="qemr-total" class="qemr amount">$1104.00</div>
+      <div id="other-total" class="other amount">$2880.00</div>
+      <div id="other2-total" class="other2 amount">$4624.00</div>
     </div>
   </div>
-  <div class="savings price-line">You save <span class="saved">$111.00</span> per month!</div>
+  <div class="savings price-line">Save up to <span class="saved">$3520.00</span> per month!</div>
 </div>
