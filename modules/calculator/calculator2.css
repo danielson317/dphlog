@@ -25,10 +25,6 @@ body
   display:flex;
   flex-flow: column;
 }
-#price_calculator .price-line .operation
-{
-  width: 155px;
-}
 
 #price_calculator .service
 {
@@ -37,14 +33,12 @@ body
 
   display: flex;
   align-items: center;
-  margin-left: 10px;
-  /*justify-content: center;*/
+  justify-content: center;
 }
 #price_calculator .operation
 {
-  margin: 0 auto 0 10px;
-  /*flex-basis: 100px;*/
-  /*flex-grow: 1;*/
+  flex-basis: 100px;
+  flex-grow: 1;
   height: 30px;
 
   display: flex;
@@ -55,7 +49,7 @@ body
   /*border-style: dashed;*/
   /*border-color: #666;*/
 
-  /*margin: 5px 0;*/
+  margin: 5px 0;
 }
 
 #price_calculator .right
@@ -69,20 +63,13 @@ body
 
 #price_calculator .amount
 {
-  width: 120px;
-  /*flex-basis: 100px;*/
-  /*flex-grow: 1;*/
+  flex-basis: 100px;
+  flex-grow: 1;
   justify-content: center;
 
   display: flex;
   align-items: center;
   height: 40px;
-}
-
-#price_calculator .other.amount
-{
-  border-right: 1px dotted gray;
-  border-left: 1px dotted gray;
 }
 
 /***********************
@@ -97,8 +84,9 @@ body
 
 #price_calculator .header .label
 {
-  width: 120px;
   height: 40px;
+  flex-basis: 100px;
+  flex-grow: 1;
 
   display: flex;
   align-items: center;
@@ -175,7 +163,7 @@ body
 }
 #price_calculator .number-field-wrapper input.value
 {
-  width: 45px;
+  width: 70px;
   height: 30px;
   text-align: center;
   border: none;
@@ -209,7 +197,7 @@ body
 #price_calculator .switch {
   position: relative;
   display: inline-block;
-  width: 105px;
+  width: 60px;
   height: 34px;
 }
 
@@ -262,7 +250,6 @@ body
 /* Rounded sliders */
 #price_calculator .slider.round {
   border-radius: 34px;
-  width:60px;
 }
 
 #price_calculator .slider.round:before {

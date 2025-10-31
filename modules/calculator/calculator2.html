@@ -4,23 +4,18 @@
     // CONSTANTS - Prices.
     const QEMR_FULL_TIME_PRICE = 69;
     const OTHER_FULL_TIME_PRICE = 180;
-    const OTHER2_FULL_TIME_PRICE = 289;
 
     const QEMR_PART_TIME_PRICE = 35;
     const OTHER_PART_TIME_PRICE = 180;
-    const OTHER2_PART_TIME_PRICE = 199;
 
     const QEMR_SUPPORT_PRICE = 0;
     const OTHER_SUPPORT_PRICE = 59;
-    const OTHER2_SUPPORT_PRICE = 0;
 
     const QEMR_CONNECT_PRICE = 0;
     const OTHER_CONNECT_PRICE = 399;
-    const OTHER2_CONNECT_PRICE = 0;
 
     const QEMR_CALL_PRICE = 0.12;
     const OTHER_CALL_PRICE = 0.21;
-    const OTHER2_CALL_PRICE = 0;
 
     let $price_calculator = $('#price_calculator');
 
@@ -28,27 +23,22 @@
     let $full_time_provider_input = $price_calculator.find("#full_time_provider input.value");
     let $qemr_provider_value = $price_calculator.find("#qemr-provider-value");
     let $other_provider_value = $price_calculator.find("#other-provider-value");
-    let $other2_provider_value = $price_calculator.find("#other2-provider-value");
 
     let $part_time_provider_input = $price_calculator.find("#part_time_provider input.value");
     let $qemr_pt_provider_value = $price_calculator.find("#qemr-pt-provider-value");
     let $other_pt_provider_value = $price_calculator.find("#other-pt-provider-value");
-    let $other2_pt_provider_value = $price_calculator.find("#other2-pt-provider-value");
 
     let $support_input = $price_calculator.find("#support input.value");
     let $qemr_support_value = $price_calculator.find("#qemr-support-value");
     let $other_support_value = $price_calculator.find("#other-support-value");
-    let $other2_support_value = $price_calculator.find("#other2-support-value");
 
     let $connect_input = $price_calculator.find("#connect-input");
     let $qemr_connect_value = $price_calculator.find("#qemr-connect-value");
     let $other_connect_value = $price_calculator.find("#other-connect-value");
-    let $other2_connect_value = $price_calculator.find("#other2-connect-value");
 
     let $reminder_calls_input = $price_calculator.find("#reminder_calls input.value");
     let $qemr_reminder_calls_value = $price_calculator.find("#qemr-calls-value");
     let $other_reminder_calls_value = $price_calculator.find("#other-calls-value");
-    let $other2_reminder_calls_value = $price_calculator.find("#other2-calls-value");
 
     let $totals_row = $price_calculator.find(".totals");
     let $savings_row = $price_calculator.find(".savings");
@@ -66,27 +56,15 @@
     let other_connect_amount = 0
     let other_calls_amount = 0;
 
-    let other2_ft_amount = 0;
-    let other2_pt_amount = 0;
-    let other2_support_amount = 0;
-    let other2_connect_amount = 0
-    let other2_calls_amount = 0;
-
     // On totals refresh.
     $totals_row.on("refresh", function()
     {
-      let qemr_total = (qemr_ft_amount + qemr_pt_amount + qemr_calls_amount + qemr_support_amount + qemr_connect_amount);
-      $totals_row.find(".qemr").text("$" + qemr_total.toFixed(2));
-
+      let total = (qemr_ft_amount + qemr_pt_amount + qemr_calls_amount + qemr_support_amount + qemr_connect_amount);
+      $totals_row.find(".qemr").text("$" + total.toFixed(2));
       let other_total = other_ft_amount + other_pt_amount + other_calls_amount + other_support_amount + other_connect_amount;
       $totals_row.find(".other").text("$" + other_total.toFixed(2));
-
-      let other2_total = other2_ft_amount + other2_pt_amount + other2_calls_amount + other2_support_amount + other2_connect_amount;
-      $totals_row.find(".other2").text("$" + other2_total.toFixed(2));
-
-      let savings = other_total - qemr_total;
-      let savings2 = other2_total - qemr_total;
-      $savings_row.find(".saved").text("$" + Math.max(savings, savings2).toFixed(2));
+      let savings = other_total - total;
+      $savings_row.find(".saved").text("$" + savings.toFixed(2));
     });
 
     // Full time provider cells.
@@ -94,7 +72,6 @@
     {
       qemr_ft_amount = calculatePrices($full_time_provider_input, QEMR_FULL_TIME_PRICE, $qemr_provider_value);
       other_ft_amount = calculatePrices($full_time_provider_input, OTHER_FULL_TIME_PRICE, $other_provider_value);
-      other2_ft_amount = calculatePrices($full_time_provider_input, OTHER2_FULL_TIME_PRICE, $other2_provider_value);
       $totals_row.trigger("refresh");
     }).change();
 
@@ -103,7 +80,6 @@
     {
       qemr_pt_amount = calculatePrices($part_time_provider_input, QEMR_PART_TIME_PRICE, $qemr_pt_provider_value);
       other_pt_amount = calculatePrices($part_time_provider_input, OTHER_PART_TIME_PRICE, $other_pt_provider_value);
-      other2_pt_amount = calculatePrices($part_time_provider_input, OTHER2_PART_TIME_PRICE, $other2_pt_provider_value);
       $totals_row.trigger("refresh");
     }).change();
 
@@ -113,7 +89,6 @@
     {
       qemr_support_amount = calculatePrices($support_input, QEMR_SUPPORT_PRICE, $qemr_support_value);
       other_support_amount = calculatePrices($support_input, OTHER_SUPPORT_PRICE, $other_support_value);
-      other2_support_amount = calculatePrices($support_input, OTHER2_SUPPORT_PRICE, $other2_support_value);
       $totals_row.trigger("refresh");
     }).change();
 
@@ -127,18 +102,15 @@
       {
         qemr_connect_amount = QEMR_CONNECT_PRICE;
         other_connect_amount = OTHER_CONNECT_PRICE;
-        other2_connect_amount = OTHER2_CONNECT_PRICE;
       }
       else
       {
         qemr_connect_amount = 0;
         other_connect_amount = 0;
-        other2_connect_amount = 0;
       }
 
       $qemr_connect_value.text("$" + qemr_connect_amount.toFixed(2));
       $other_connect_value.text("$" + other_connect_amount.toFixed(2));
-      $other2_connect_value.text("$" + other2_connect_amount.toFixed(2));
 
       $totals_row.trigger("refresh");
     });
@@ -148,7 +120,6 @@
     {
       qemr_calls_amount = calculatePrices($reminder_calls_input, QEMR_CALL_PRICE, $qemr_reminder_calls_value);
       other_calls_amount = calculatePrices($reminder_calls_input, OTHER_CALL_PRICE, $other_reminder_calls_value);
-      other2_calls_amount = calculatePrices($reminder_calls_input, OTHER2_CALL_PRICE, $other2_reminder_calls_value);
       $totals_row.trigger("refresh");
     }).change();
 
@@ -217,10 +188,6 @@
     display:flex;
     flex-flow: column;
   }
-  #price_calculator .price-line .operation
-  {
-    width: 155px;
-  }
 
   #price_calculator .service
   {
@@ -229,14 +196,12 @@
 
     display: flex;
     align-items: center;
-    margin-left: 10px;
-    /*justify-content: center;*/
+    justify-content: center;
   }
   #price_calculator .operation
   {
-    margin: 0 auto 0 10px;
-    /*flex-basis: 100px;*/
-    /*flex-grow: 1;*/
+    flex-basis: 100px;
+    flex-grow: 1;
     height: 30px;
 
     display: flex;
@@ -247,7 +212,7 @@
     /*border-style: dashed;*/
     /*border-color: #666;*/
 
-    /*margin: 5px 0;*/
+    margin: 5px 0;
   }
 
   #price_calculator .right
@@ -261,20 +226,13 @@
 
   #price_calculator .amount
   {
-    width: 120px;
-    /*flex-basis: 100px;*/
-    /*flex-grow: 1;*/
+    flex-basis: 100px;
+    flex-grow: 1;
     justify-content: center;
 
     display: flex;
     align-items: center;
     height: 40px;
-  }
-
-  #price_calculator .other.amount
-  {
-    border-right: 1px dotted gray;
-    border-left: 1px dotted gray;
   }
 
   /***********************
@@ -289,8 +247,9 @@
 
   #price_calculator .header .label
   {
-    width: 120px;
     height: 40px;
+    flex-basis: 100px;
+    flex-grow: 1;
 
     display: flex;
     align-items: center;
@@ -303,8 +262,8 @@
   {
     /*color: transparent;*/
     /*color: #FFE;*/
-    /*background-color: #EDA225;*/
-    filter: drop-shadow(0px 2px 2px #999);
+    background-color: #EDA225;
+    filter: drop-shadow(0px 0px 8px #555);
     /*border-radius: 3px;*/
   }
   #price_calculator .header .label.qemr .logo
@@ -363,11 +322,11 @@
   #price_calculator .number-field-wrapper
   {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
   }
   #price_calculator .number-field-wrapper input.value
   {
-    width: 45px;
+    width: 40px;
     height: 30px;
     text-align: center;
     border: none;
@@ -401,7 +360,7 @@
   #price_calculator .switch {
     position: relative;
     display: inline-block;
-    width: 105px;
+    width: 60px;
     height: 34px;
   }
 
@@ -454,11 +413,88 @@
   /* Rounded sliders */
   #price_calculator .slider.round {
     border-radius: 34px;
-    width:60px;
   }
 
   #price_calculator .slider.round:before {
     border-radius: 50%;
   }</style>
-
-  <div class="header"><div class="operation"></div><span class="label qemr"><span class="logo"></span></span><span class="label other">WebPT</span><span class="label other2">PromptEMR</span></div><div class="provider-info price-line"><div class="service">Full Time Providers</div><div class="right"><div class="operation"><div id="full_time_provider" class="number-field-wrapper"><input type="button" value="" class="minus operator"><input type="textfield" min="1" value="1" increment="1" class="value"><input type="button" value="" class="plus operator"></div></div><div id="qemr-provider-value" class="qemr amount">$1104.00</div><div id="other-provider-value" class="other amount">$2880.00</div><div id="other2-provider-value" class="other2 amount">$4624.00</div></div></div><div class="pt-provider-info price-line"><div class="service">Part Time Providers</div><div class="right"><div class="operation"><div id="part_time_provider" class="number-field-wrapper"><input type="button" value="" class="minus operator"><input type="textfield" min="0" value="0" increment="1" class="value"><input type="button" value="" class="plus operator"></div></div><div id="qemr-pt-provider-value" class="qemr amount">$0.00</div><div id="other-pt-provider-value" class="other amount">$0.00</div><div id="other2-pt-provider-value" class="other2 amount">$0.00</div></div></div><div class="support-info price-line"><div class="service">Non-Provider Users</div><div class="right"><div class="operation"><div id="support" class="number-field-wrapper"><input type="button" value="" class="minus operator"><input type="textfield" min="0" value="0" increment="1" class="value"><input type="button" value="" class="plus operator"></div></div><div id="qemr-support-value" class="qemr amount">$0.00</div><div id="other-support-value" class="other amount">$0.00</div><div id="other2-support-value" class="other2 amount">$0.00</div></div></div><div class="connect-info price-line"><div class="service">Connect/Reach Patients</div><div class="right"><div class="operation"><label class="switch"><input type="checkbox" id="connect-input" class="conversion-inputs"><span class="slider round"></span></label></div><div id="qemr-connect-value" class="qemr amount">$0.00</div><div id="other-connect-value" class="other amount">$0.00</div><div id="other2-connect-value" class="other2 amount">$0.00</div></div></div><div class="calls-info price-line"><div class="service">Reminder Calls/Texts</div><div class="right"><div class="operation"><div id="reminder_calls" class="number-field-wrapper"><input type="button" value="" class="minus operator"><input type="textfield" min="0" value="0" increment="50" class="value"><input type="button" value="" class="plus operator"></div></div><div id="qemr-calls-value" class="qemr amount">$0.00</div><div id="other-calls-value" class="other amount">$0.00</div><div id="other2-calls-value" class="other2 amount">$0.00</div></div></div><div class="totals price-line"><div class="right"><div class="operation"></div><div id="qemr-total" class="qemr amount">$1104.00</div><div id="other-total" class="other amount">$2880.00</div><div id="other2-total" class="other2 amount">$4624.00</div></div></div><div class="savings price-line">Save up to <span class="saved">$3520.00</span> per month!</div></div>
+  <div class="header"><span class="label qemr"><span class="logo"></span></span>
+    <div class="operation"></div>
+    <span class="label other">WebPT</span></div>
+  <div class="provider-info price-line">
+    <div class="service">Full Time Providers</div>
+    <div class="right">
+      <div class="qemr amount" id="qemr-provider-value">$69.00</div>
+      <div class="operation">
+        <div class="number-field-wrapper" id="full_time_provider">
+          <input class="minus operator" type="button" value="">
+          <input class="value" increment="1" min="1" type="textfield" value="1">
+          <input class="plus operator" type="button" value="">
+        </div>
+      </div>
+      <div class="other amount" id="other-provider-value">$180.00</div>
+    </div>
+  </div>
+  <div class="pt-provider-info price-line">
+    <div class="service">Part Time Providers</div>
+    <div class="right">
+      <div class="qemr amount" id="qemr-pt-provider-value">$0.00</div>
+      <div class="operation">
+        <div class="number-field-wrapper" id="part_time_provider">
+          <input class="minus operator" type="button" value="">
+          <input class="value" increment="1" min="0" type="textfield" value="0">
+          <input class="plus operator" type="button" value="">
+        </div>
+      </div>
+      <div class="other amount" id="other-pt-provider-value">$0.00</div>
+    </div>
+  </div>
+  <div class="support-info price-line">
+    <div class="service">Non-Provider Users</div>
+    <div class="right">
+      <div class="qemr amount" id="qemr-support-value">$0.00</div>
+      <div class="operation">
+        <div class="number-field-wrapper" id="support">
+          <input class="minus operator" type="button" value="">
+          <input class="value" increment="1" min="0" type="textfield" value="0">
+          <input class="plus operator" type="button" value="">
+        </div>
+      </div>
+      <div class="other amount" id="other-support-value">$0.00</div>
+    </div>
+  </div>
+  <div class="connect-info price-line">
+    <div class="service">Connect/Reach Patients</div>
+    <div class="right">
+      <div class="qemr amount" id="qemr-connect-value">$0.00</div>
+      <div class="operation">
+        <label class="switch">
+          <input class="conversion-inputs" id="connect-input" type="checkbox">
+          <span class="slider round"></span></label>
+      </div>
+      <div class="other amount" id="other-connect-value">$0.00</div>
+    </div>
+  </div>
+  <div class="calls-info price-line">
+    <div class="service">Reminder Calls</div>
+    <div class="right">
+      <div class="qemr amount" id="qemr-calls-value">$0.00</div>
+      <div class="operation">
+        <div class="number-field-wrapper" id="reminder_calls">
+          <input class="minus operator" type="button" value="">
+          <input class="value" increment="50" min="0" type="textfield" value="0">
+          <input class="plus operator" type="button" value="">
+        </div>
+      </div>
+      <div class="other amount" id="other-calls-value">$0.00</div>
+    </div>
+  </div>
+  <div class="totals price-line">
+    <div class="right">
+      <div class="qemr amount">$69.00</div>
+      <div class="operation"></div>
+      <div class="other amount">$180.00</div>
+    </div>
+  </div>
+  <div class="savings price-line">You save <span class="saved">$111.00</span> per month!</div>
+</div>
