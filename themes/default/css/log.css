@@ -42,6 +42,7 @@ td.column-4 pre
 {
   max-height: 100px;
   overflow-y: scroll;
+  text-wrap: wrap;
 }
 
 input

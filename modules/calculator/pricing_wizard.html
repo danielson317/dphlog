@@ -1,0 +1,421 @@
+<html>
+<head>
+<style>
+  body
+  {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #E7E7E7;
+  }
+  #body_wrapper
+  {
+    /*margin: 10px auto;*/
+    width: 800px;
+    /*margin-bottom: 10%;*/
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  #header
+  {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #menu
+  {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  #menu .link
+  {
+    background-color: #08A2A4;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: default;
+  }
+  #menu .link.current
+  {
+    font-weight: 700;
+  }
+  #menu .spacer
+  {
+    display: block;
+    width: 16px;
+    height: 16px;
+    background: center center no-repeat transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFv2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgOS4xLWMwMDEgNzkuYThkNDc1MywgMjAyMy8wMy8yMy0wODo1NjozNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczpzdEV2dD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlRXZlbnQjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6Rjc3RjExNzQwNzIwNjgxMUEzRkJCMzU1QTk5ODI1RUMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTVGQjBGQUYxOTkzMTFFN0FGNEZEMEM5NkE1NUNEMjgiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzQ3NTNhNDQtYTFmMS1iZjRkLTg3OTktMTBhNzBjZWQ4YmZiIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDUzUgTWFjaW50b3NoIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMy0wNC0yN1QxMDo1NTozNS0wNjowMCIgeG1wOk1vZGlmeURhdGU9IjIwMjMtMDktMDVUMTI6NDk6NTgtMDY6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjMtMDktMDVUMTI6NDk6NTgtMDY6MDAiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RkI3RjExNzQwNzIwNjgxMUEzRkJCMzU1QTk5ODI1RUMiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6Rjc3RjExNzQwNzIwNjgxMUEzRkJCMzU1QTk5ODI1RUMiLz4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6MzQ3NTNhNDQtYTFmMS1iZjRkLTg3OTktMTBhNzBjZWQ4YmZiIiBzdEV2dDp3aGVuPSIyMDIzLTA5LTA1VDEyOjQ5OjU4LTA2OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjQuNyAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPC9yZGY6U2VxPiA8L3htcE1NOkhpc3Rvcnk+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+zxDf+AAAAWhJREFUOI190j1rVEEYxfHfLit7A0YUUvsFbCwsRBEkoKColaa63EYQXxAFuyCChaVWGuu9e1ESC9+CEG38CoKVQawstTSLEMZiZ+XZ3eweGObeM/wP5xlGSkm319/f7fVvp5TE1e31r3d7/aVJP662oXZwt6ibR8a1jBdF3SyYoVFAwi5Wi7p5GM7/4AzWZ4W0w3cn7w9CSCvvF7GxV0grpQSKurmBtXC2inf4jKXsbWJlUJU7UwE55CaehZB72JoXEkcwqMo13ArWY5zFafzK3oU4zliD0OQqnqLI1n18wBsczt4WyvYUPdQX/A3/x7CN38E7gsWpgKJuTub0A9nawDV8wtHsfcfyoCp/dPaA3+NQtl4Z3slbHA/w+UFVbhMusaibUxPwa9zJ8IkJ+NuI62S4hecB3sQVPJkHxwYt7AvwyqAqd3FwHvy/QdYiPhp/aQv4iXOjmSc1alDgJS7HZ4qvuDQLhn/Sypr5yxnOhwAAAABJRU5ErkJggg==);
+    filter: brightness(60%) saturate(0%);
+  }
+
+  /***********************
+   * Global Styles
+   ***********************/
+  .page
+  {
+    display: flex;
+    flex-direction: column;
+    min-height: 400px;
+
+  }
+  .page .next
+  {
+    margin-left: auto;
+  }
+  .hidden
+  {
+    display: none;
+  }
+  input[type=button]
+  {
+    background-color: #08A2A4;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: default;
+    border: none;
+  }
+  .checkbox_group
+  {
+    margin-top: 15px;
+  }
+  .description
+  {
+    font-size: small;
+    color: #444444;
+    margin-left: 20px;
+    margin-top: 5px;
+  }
+
+  table thead
+  {
+    font-weight: 700;
+    background-color: #0a0a0a;
+    color: white;
+    padding: 5px;
+  }
+  table thead td
+  {
+    padding: 5px;
+  }
+
+  /***********************
+   * Provider Page
+   ***********************/
+  #provider_template
+  {
+    display: none;
+  }
+  #provider_add
+  {
+    margin-right: auto;
+  }
+
+  /***********************
+   * Add Ons
+   ***********************/
+
+  /***********************
+   * Billing
+   ***********************/
+  #billing_amount_group
+  {
+    margin-top: 15px;
+  }
+
+  /***********************
+   * Estimate
+   ***********************/
+  #estimate_table td:first-of-type
+  {
+    width: 200px;
+  }
+  #estimate_table .amount,
+  #estimate_table .amount-other,
+  #estimate_table .amount-other2
+  {
+    width:100px;
+    text-align: right;
+  }
+  #estimate_table .total
+  {
+    font-weight: 700;
+  }
+
+
+</style>
+<script>
+
+  /***********************
+   * Constants
+   ***********************/
+  QEMR_BASE_RATE = 79;
+  OTHER_BASE_RATE = 180;
+  OTHER2_BASE_RATE = 289;
+
+  OTHER_PART_TIME = 180;
+  OTHER2_PART_TIME = 199;
+
+  /***********************
+   * Globals and on ready.
+   ***********************/
+  let menu;
+  if(document.readyState === "complete")
+  {
+    // Fully loaded!
+  }
+  else if(document.readyState === "interactive")
+  {
+    // DOM ready! Images, frames, and other subresources are still downloading.
+  }
+  else
+  {
+    // Loading still in progress.
+    // To wait for it to complete, add "DOMContentLoaded" or "load" listeners.
+    window.addEventListener("DOMContentLoaded", function()
+    {
+      menuBehaviors();
+      providerBehaviors();
+      addonsBehaviors();
+    });
+  }
+
+  /***********************
+   * Menu
+   ***********************/
+  function menuBehaviors()
+  {
+    menu = document.getElementById('menu');
+    menu.querySelector('#provider').onclick = function()
+    {
+      document.getElementById('provider').classList.add('current');
+      document.getElementById('addons').classList.remove('current');
+      document.getElementById('billing').classList.remove('current');
+      document.getElementById('estimate').classList.remove('current');
+
+      document.getElementById('provider_page').classList.remove('hidden');
+      document.getElementById('addons_page').classList.add('hidden');
+      document.getElementById('billing_page').classList.add('hidden');
+      document.getElementById('estimate_page').classList.add('hidden');
+    }
+    menu.querySelector('#addons').onclick = function()
+    {
+      document.getElementById('provider').classList.remove('current');
+      document.getElementById('addons').classList.add('current');
+      document.getElementById('billing').classList.remove('current');
+      document.getElementById('estimate').classList.remove('current');
+
+      document.getElementById('provider_page').classList.add('hidden');
+      document.getElementById('addons_page').classList.remove('hidden');
+      document.getElementById('billing_page').classList.add('hidden');
+      document.getElementById('estimate_page').classList.add('hidden');
+    }
+    menu.querySelector('#billing').onclick = function()
+    {
+      document.getElementById('provider').classList.remove('current');
+      document.getElementById('addons').classList.remove('current');
+      document.getElementById('billing').classList.add('current');
+      document.getElementById('estimate').classList.remove('current');
+
+      document.getElementById('provider_page').classList.add('hidden');
+      document.getElementById('addons_page').classList.add('hidden');
+      document.getElementById('billing_page').classList.remove('hidden');
+      document.getElementById('estimate_page').classList.add('hidden');
+    }
+    menu.querySelector('#estimate').onclick = function()
+    {
+      document.getElementById('provider').classList.remove('current');
+      document.getElementById('addons').classList.remove('current');
+      document.getElementById('billing').classList.remove('current');
+      document.getElementById('estimate').classList.add('current');
+
+      document.getElementById('provider_page').classList.add('hidden');
+      document.getElementById('addons_page').classList.add('hidden');
+      document.getElementById('billing_page').classList.add('hidden');
+      document.getElementById('estimate_page').classList.remove('hidden');
+
+      estimateCalculate();
+    }
+  }
+
+  /***********************
+   * Provider
+   ***********************/
+  function providerBehaviors()
+  {
+    let provider_table = document.getElementById('provider_table').querySelector('tbody');
+    let provider_add = document.getElementById('provider_add');
+    let provider_count = 2;
+    provider_add.onclick = function()
+    {
+      let new_row = document.getElementById('provider_template').cloneNode(true);
+      new_row.id = 'provider_' + provider_count;
+      new_row.querySelector('#name').id = 'name_' + provider_count;
+      new_row.querySelector('#notes').id = 'notes_' + provider_count;
+      new_row.querySelector('#transcribe').id = 'transcribe_' + provider_count;
+      new_row.querySelector('#hep').id = 'hep_' + provider_count;
+      new_row.classList.add('user-row');
+      provider_count++;
+
+      provider_table.append(new_row);
+    }
+  }
+
+  /***********************
+   * Add-Ons
+   ***********************/
+  function addonsBehaviors()
+  {
+
+  }
+
+  /***********************
+   * Group
+   ***********************/
+  function estimateCalculate()
+  {
+    let providers = document.getElementById('provider_table').querySelectorAll('tr.user-row');
+    let reminder_calls = document.getElementById('reminder_calls').checked;
+    let faxing = document.getElementById('fax').checked;
+    let benefits = document.getElementById('benefits').checked;
+    let billing = document.getElementById('billing').checked;
+    let billing_amount = document.getElementById('billing_amount').value;
+
+    // Build a new table.
+    let output = document.createElement('tbody');
+
+    // Setup totals
+    let total_amount = 0;
+    let total_other = 0;
+    let total_other2 = 0;
+    let provider_notes = 0;
+
+    // Providers
+    providers.forEach(function(row)
+    {
+      let new_row = document.getElementById('row_template').cloneNode(true);
+      let name = row.querySelector('input.name').value;
+      let notes = row.querySelector('input.notes').value;
+
+      new_row.querySelector('td.type').innerHTML = 'Provider';
+      new_row.querySelector('td.detail').innerHTML = name;
+
+      let qty = 1
+      if (billing)
+      {
+        qty = 0;
+        name += ' - Billing Discount';
+      }
+      else if (notes < 5)
+      {
+        qty = 0;
+      }
+      else if (notes < 34)
+      {
+        qty = 0.25;
+      }
+      else if (notes < 66)
+      {
+        qty = 0.5;
+      }
+      else if (notes < 100)
+      {
+        qty = 0.75;
+      }
+      new_row.querySelector('td.amount').innerHTML = Math.round(qty * QEMR_BASE_RATE);
+      new_row.querySelector('td.amount-other').innerHTML = OTHER_BASE_RATE;
+      new_row.querySelector('td.amount-other2').innerHTML = qty < 1 ? OTHER2_PART_TIME : OTHER2_BASE_RATE;
+      output.appendChild(new_row);
+
+      total_amount += Math.round(qty * QEMR_BASE_RATE);
+      total_other += OTHER_BASE_RATE;
+      total_other2 += qty < 1 ? OTHER2_PART_TIME : OTHER2_BASE_RATE;
+    })
+
+    document.getElementById('estimate_table').querySelector('tbody').replaceWith(output);
+  }
+</script>
+</head>
+<body>
+<div id="body_wrapper">
+<div id="header">
+  <div id="logo"><img alt="QuickEMR Logo" src="data:image/png;base64,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"></div>
+  <div id="menu">
+    <span id="provider" class="link current">Providers</span>
+    <span class="spacer"></span>
+    <span id="addons" class="link">Add-Ons</span>
+    <span class="spacer"></span>
+    <span id="billing" class="link">Billing</span>
+    <span class="spacer"></span>
+    <span id="estimate" class="link">Estimate</span>
+  </div>
+</div>
+<div id="content">
+  <div id="provider_page" class="page">
+    <table id="provider_table">
+      <thead>
+        <tr><td>Provider</td><td>Notes Per Month</td><td>AI Transcribe</td><td>Home Exercise Program</td></tr>
+      </thead>
+      <tbody>
+        <tr id="provider_template"><td><input id="name" class="name" type="text" placeholder="Greg"></td><td><input id="notes" class="notes" type="text" placeholder="150"></td><td><input id="transcribe" class="transcribe" type="checkbox"></td><td><input id="hep" class="hep" type="checkbox"></td></tr>
+        <tr id="provider_1" class="user-row"><td><input id="name_01" class="name" type="text" placeholder="Greg"></td><td><input id="notes_01" class="notes" type="text" placeholder="150"></td><td><input id="transcribe_01" class="transcribe" type="checkbox"></td><td><input id="hep_01" class="hep" type="checkbox"></td></tr>
+      </tbody>
+    </table>
+    <input id="provider_add" type="button" value="Add Provider">
+    <input id="provider_next" class="next" type="button" value="Next Step">
+  </div>
+  <div id="addons_page" class="page hidden">
+    <div id="addons_list">
+      <div class="checkbox_group">
+        <input id="reminder_calls" type="checkbox"><label for="reminder_calls">Reminder Calls</label>
+        <div class="description">Automated voice and text messages to remind your patients of an upcoming appointment.</div>
+      </div>
+      <div class="checkbox_group">
+        <input id="fax" type="checkbox"><label for="fax">In Application Faxing</label>
+        <div class="description">Send faxes to referring physicians, insurance companies, or case managers directly from within the application.</div>
+      </div>
+      <div class="checkbox_group">
+        <input id="benefits" type="checkbox"><label for="benefits">In application Benefits & Eligibility checking.</label>
+        <div class="description">Verify a patients eligibility and check their benefits from within the application.</div>
+      </div>
+    </div>
+    <input id="addons_next" class="next" type="button" value="Next Step">
+  </div>
+  <div id="billing_page" class="page hidden">
+    <div class="checkbox_group">
+      <input id="billing_services" type="checkbox"><label for="fax">QuickEMR Billing Services</label>
+      <div class="description">Take the headache out of billing by entrusting it to our team of experts. QuickEMR billing has over 97% payout on claims handled by our team. Get paid faster, with fewer denials, and with experts handling the constantly changing billing requirements.</div>
+    </div>
+    <div id="billing_amount_group">
+      <label for="billing_amount">Monthly amount billed</label> <input id="billing_amount" type="text">
+    </div>
+    <input id="billing_next" class="next" type="button" value="Next Step">
+  </div>
+  <div id="estimate_page" class="page hidden">
+    <table id="estimate_table_template" class="hidden">
+      <tbody>
+        <tr id="row_template"><td class="type">Provider</td><td class="detail">Greg</td><td class="amount">$79</td><td class="amount-other">$79</td><td class="amount-other2">$79</td></tr>
+        <tr id="total_template"><td colspan="2">Total</td><td>$79</td></tr>
+      </tbody>
+    </table>
+    <table id="estimate_table">
+      <thead>
+        <tr><td>Charge Description</td><td>Charge Detail</td><td>Charge</td><td>Competitor</td><td>Competitor</td></tr>
+      </thead>
+      <tbody>
+        <tr><td>Provider</td><td>Greg</td><td>$79</td></tr>
+        <tr class="total"><td colspan="2">Total</td><td>$79</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+</body>
+</html>

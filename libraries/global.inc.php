@@ -182,8 +182,11 @@ function u($target = '', $options = array())
     // If the url should be absolute include the protocol and domain.
     if (isset($options['absolute']))
     {
-      $s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : "";
-      $protocol = strLeft(strtolower($_SERVER["SERVER_PROTOCOL"]), "/") . $s;
+      $s = '';
+      if (!empty($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on")
+      {
+        $s = 's';
+      }      $protocol = strLeft(strtolower($_SERVER["SERVER_PROTOCOL"]), "/") . $s;
       $link .= $protocol . "://" . $_SERVER['SERVER_NAME'];
     }
 

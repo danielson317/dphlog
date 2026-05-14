@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Per-Provider Pricing Wizard — Stylish HTML</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f172a; --card:#0b1220; --muted:#9aa4b2; --accent:#7c3aed; --accent-2:#06b6d4; --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.02);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:linear-gradient(180deg,#071629 0%, #0d1830 100%);color:#e6eef8}
+    .container{max-width:1100px;margin:36px auto;padding:28px}
+
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:22px;box-shadow:0 6px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:20px}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:4px 0 0;color:var(--muted);font-size:13px}
+
+    .steps{display:flex;gap:8px;margin:14px 0}
+    .step{padding:8px 12px;border-radius:10px;background:var(--glass-2);cursor:pointer;font-size:13px;color:var(--muted)}
+    .step.active{background:linear-gradient(90deg, rgba(124,58,237,0.12), rgba(6,182,212,0.08));color:white;border:1px solid rgba(255,255,255,0.04)}
+
+    .grid-2{display:grid;grid-template-columns:1fr 320px;gap:18px}
+    .field{margin-bottom:10px}
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    input[type="text"],input[type="number"],select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    .row{display:flex;gap:10px}
+    .muted{color:var(--muted);font-size:13px}
+
+    .provider-card{background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);margin-bottom:12px}
+    .provider-head{display:flex;justify-content:space-between;align-items:center}
+
+    .switch{display:inline-flex;align-items:center;gap:8px}
+    .btn{padding:10px 14px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:none;color:white}
+    .btn.ghost{background:transparent}
+
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    th,td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left;font-size:13px}
+    th{color:var(--muted);font-weight:600}
+
+    .totals{margin-top:12px;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border-radius:10px}
+
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+
+    /* responsive */
+    @media (max-width:900px){.grid-2{grid-template-columns:1fr}.container{padding:16px}}
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <header>
+      <div class="logo">PW</div>
+      <div>
+        <h1>Per-Provider Pricing Wizard</h1>
+        <p class="lead">Enter provider details, toggle services, input billing info — get a clear cost & ROI estimate.</p>
+      </div>
+    </header>
+
+    <div class="steps" id="steps"></div>
+
+    <div id="content" style="margin-top:10px"></div>
+
+    <footer>
+      <div class="muted">Assumptions: Base provider fee $79; tiers: 0–4 free, 5–33 25%, 34–65 50%, 66–99 75%; AI $30/provider; HEP $10/provider; Reminder calls $0.14/note; Fax $0.01/note; Benefits $0.25/5 notes (i.e. $0.05/note); Billing service 6% of monthly billing and waives provider fee. Billing service displays ROI = 97% of income after 6% fee (compared for display).</div>
+    </footer>
+  </div>
+</div>
+
+<script>
+  // Data model and constants
+  const BASE_PROVIDER_FEE = 79;
+  let providers = [createEmptyProvider(1)];
+  let step = 1;
+
+  function createEmptyProvider(n){
+    return {
+      id: Date.now() + Math.random(),
+      name: 'Provider ' + n,
+      notesPerMonth: 0,
+      aiTranscribe: false,
+      homeExercise: false,
+      reminderCalls: false,
+      faxing: false,
+      benefitsCheck: false,
+      monthlyBillingAmount: 0,
+      currentROI: 0,
+      useBillingService: false
+    }
+  }
+
+  function tierMultiplier(notes){
+    notes = Number(notes) || 0;
+    if(notes <= 4) return 0;
+    if(notes <= 33) return 0.25;
+    if(notes <= 65) return 0.5;
+    if(notes <= 99) return 0.75;
+    return 1;
+  }
+
+  function round(n, digits=2){return Math.round((Number(n)||0)*Math.pow(10,digits))/Math.pow(10,digits)}
+
+  function calcProviderCost(provider){
+    const notes = Number(provider.notesPerMonth)||0;
+    const tierCost = BASE_PROVIDER_FEE * tierMultiplier(notes);
+    // If billing service used -> provider fee waived. Otherwise: apply tier; but ensure base full-time $79 at least one per practice is honored across practice (we assume per-provider base applies when tier multiplier >0)
+    let providerFee = provider.useBillingService ? 0 : (tierCost === 0 ? 0 : Math.max(BASE_PROVIDER_FEE, round(tierCost)));
+    // Note: if notes <=4, tierCost=0 -> providerFee=0 (free tier)
+
+    const aiCost = provider.aiTranscribe ? 30 : 0;
+    const hepCost = provider.homeExercise ? 10 : 0;
+    const reminderCost = provider.reminderCalls ? 0.14 * notes : 0;
+    const faxCost = provider.faxing ? 0.01 * notes : 0;
+    const benefitsCost = provider.benefitsCheck ? (0.25/5) * notes : 0; // 0.05/note
+    const billingServiceFee = provider.useBillingService ? 0.06 * Number(provider.monthlyBillingAmount || 0) : 0;
+
+    const totalMonthlyCost = providerFee + aiCost + hepCost + reminderCost + faxCost + benefitsCost + billingServiceFee;
+
+    const monthlyIncome = Number(provider.monthlyBillingAmount || 0);
+    let billingServiceDisplayedROI = null;
+    if(provider.useBillingService && monthlyIncome > 0){
+      const afterFee = monthlyIncome * (1 - 0.06);
+      billingServiceDisplayedROI = (0.97 * afterFee) / monthlyIncome * 100;
+    }
+
+    const ourROI = monthlyIncome > 0 ? ((monthlyIncome - totalMonthlyCost) / monthlyIncome) * 100 : null;
+
+    return {
+      providerFee: round(providerFee),
+      aiCost: round(aiCost),
+      hepCost: round(hepCost),
+      reminderCost: round(reminderCost),
+      faxCost: round(faxCost),
+      benefitsCost: round(benefitsCost),
+      billingServiceFee: round(billingServiceFee),
+      totalMonthlyCost: round(totalMonthlyCost,2),
+      ourROI: ourROI===null?null:round(ourROI,2),
+      billingServiceDisplayedROI: billingServiceDisplayedROI===null?null:round(billingServiceDisplayedROI,2)
+    }
+  }
+
+  // Rendering
+  function render(){
+    renderSteps();
+    const content = document.getElementById('content');
+    if(step===1) renderStep1(content);
+    else if(step===2) renderStep2(content);
+    else if(step===3) renderStep3(content);
+    else renderStep4(content);
+  }
+
+  function renderSteps(){
+    const stepsEl = document.getElementById('steps');
+    stepsEl.innerHTML = '';
+    ['Providers','Per-Provider Services','Billing & ROI','Estimate'].forEach((s,i)=>{
+      const idx = i+1;
+      const el = document.createElement('div');
+      el.className = 'step' + (step===idx? ' active':'');
+      el.textContent = idx + ' — ' + s;
+      el.onclick = ()=>{ step = idx; render(); window.scrollTo({top:0,behavior:'smooth'}); };
+      stepsEl.appendChild(el);
+    })
+  }
+
+  function renderStep1(container){
+    container.innerHTML = '';
+    const left = document.createElement('div');
+    left.className = 'grid-2';
+
+    const main = document.createElement('div');
+    providers.forEach((prov, idx)=>{
+      const card = document.createElement('div'); card.className='provider-card';
+      const head = document.createElement('div'); head.className='provider-head';
+      const title = document.createElement('div'); title.innerHTML = '<strong>'+prov.name+'</strong><div class="muted">Provider #'+(idx+1)+'</div>';
+      const actions = document.createElement('div');
+      const del = document.createElement('button'); del.className='btn'; del.textContent='Remove'; del.onclick=()=>{ providers.splice(idx,1); if(providers.length===0) providers=[createEmptyProvider(1)]; render(); };
+      actions.appendChild(del);
+      head.appendChild(title); head.appendChild(actions);
+      card.appendChild(head);
+
+      const fields = document.createElement('div');
+      fields.innerHTML = `
+          <div class="row" style="margin-top:10px">
+            <div style="flex:1">
+              <label>Name</label>
+              <input type="text" value="${prov.name}" onchange="onChangeName(${prov.id}, this.value)" />
+            </div>
+            <div style="width:160px">
+              <label>Notes per month</label>
+              <input type="number" min="0" value="${prov.notesPerMonth}" onchange="onChangeNumber(${prov.id}, 'notesPerMonth', this.value)" />
+              <div class="muted" style="margin-top:6px;font-size:12px">Tiers: 0-4 free, 5-33 25%, 34-65 50%, 66-99 75%</div>
+            </div>
+          </div>
+          <div style="margin-top:8px">
+            <label>Use Billing Services?</label>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
+              <input type="checkbox" ${prov.useBillingService? 'checked':''} onchange="onToggle(${prov.id}, 'useBillingService', this.checked)" />
+              <div class="muted">If checked, provider fee ($79) is waived and billing service charges 6%.</div>
+            </div>
+          </div>
+        `;
+      card.appendChild(fields);
+      main.appendChild(card);
+    });
+
+    const right = document.createElement('div');
+    right.innerHTML = `
+        <div class="card" style="padding:12px">
+          <h3 style="margin-top:0">Providers</h3>
+          <p class="muted">Add providers for your practice. Each provider's inputs are separate & used to compute costs per-provider.</p>
+          <div style="margin-top:12px">
+            <button class="btn primary" onclick="addProvider()">+ Add Provider</button>
+          </div>
+        </div>
+      `;
+
+    container.appendChild(main);
+    container.appendChild(right);
+
+    // expose helper functions to inline handlers
+    window.onChangeName = function(id, val){ const p = providers.find(x=>x.id==id); if(p){p.name=val; render();} }
+    window.onChangeNumber = function(id, key, val){ const p = providers.find(x=>x.id==id); if(p){ p[key]=Number(val)||0; render(); } }
+    window.onToggle = function(id, key, val){ const p = providers.find(x=>x.id==id); if(p){ p[key]=!!val; render(); } }
+  }
+
+  function renderStep2(container){
+    container.innerHTML='';
+    providers.forEach((prov, idx)=>{
+      const card = document.createElement('div'); card.className='provider-card';
+      card.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><strong>${prov.name}</strong><div class="muted">Notes: ${prov.notesPerMonth}</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px">
+            <label class="switch"><input type="checkbox" ${prov.aiTranscribe? 'checked':''} onchange="onToggle(${prov.id}, 'aiTranscribe', this.checked)" /> AI Transcribe ($30/provider)</label>
+            <label class="switch"><input type="checkbox" ${prov.homeExercise? 'checked':''} onchange="onToggle(${prov.id}, 'homeExercise', this.checked)" /> Home Exercise Program ($10/provider)</label>
+            <label class="switch"><input type="checkbox" ${prov.reminderCalls? 'checked':''} onchange="onToggle(${prov.id}, 'reminderCalls', this.checked)" /> Reminder calls ($0.14/note)</label>
+            <label class="switch"><input type="checkbox" ${prov.faxing? 'checked':''} onchange="onToggle(${prov.id}, 'faxing', this.checked)" /> In-app Faxing ($0.01/note)</label>
+            <label class="switch"><input type="checkbox" ${prov.benefitsCheck? 'checked':''} onchange="onToggle(${prov.id}, 'benefitsCheck', this.checked)" /> Benefits checking ($0.25 per 5 notes)</label>
+          </div>
+        `;
+      container.appendChild(card);
+    });
+  }
+
+  function renderStep3(container){
+    container.innerHTML='';
+    providers.forEach((prov, idx)=>{
+      const card = document.createElement('div'); card.className='provider-card';
+      card.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><strong>${prov.name}</strong><div class="muted">Enter monthly billing amount and current ROI for comparison</div></div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:10px">
+            <div style="flex:1">
+              <label>Monthly billing amount</label>
+              <input type="number" min="0" value="${prov.monthlyBillingAmount}" onchange="onChangeNumber(${prov.id}, 'monthlyBillingAmount', this.value)" />
+            </div>
+            <div style="width:160px">
+              <label>Current ROI (%)</label>
+              <input type="number" min="0" value="${prov.currentROI}" onchange="onChangeNumber(${prov.id}, 'currentROI', this.value)" />
+            </div>
+          </div>
+        `;
+      container.appendChild(card);
+    });
+  }
+
+  function renderStep4(container){
+    container.innerHTML='';
+    const tableWrap = document.createElement('div');
+    tableWrap.innerHTML = `
+        <h3 style="margin-top:0">Estimate — per provider and totals</h3>
+        <div style="overflow:auto">
+          <table>
+            <thead><tr><th>Provider</th><th>Monthly Billing</th><th>Total Cost (our product)</th><th>Our ROI (%)</th><th>Billing svc display ROI (%)</th><th>Breakdown</th></tr></thead>
+            <tbody id="estimate-body"></tbody>
+          </table>
+        </div>
+      `;
+    container.appendChild(tableWrap);
+
+    const tbody = document.getElementById('estimate-body');
+    tbody.innerHTML='';
+    let totals = { totalCost:0, totalBilling:0 };
+    providers.forEach(prov=>{
+      const d = calcProviderCost(prov);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+          <td>${prov.name}</td>
+          <td>$${prov.monthlyBillingAmount||0}</td>
+          <td>$${d.totalMonthlyCost}</td>
+          <td>${d.ourROI===null? '—': d.ourROI + '%'}</td>
+          <td>${d.billingServiceDisplayedROI===null? '—': d.billingServiceDisplayedROI + '%'}</td>
+          <td style="font-size:12px;color:var(--muted)">Fee: $${d.providerFee} • AI: $${d.aiCost} • HEP: $${d.hepCost} • Reminders: $${d.reminderCost} • Fax: $${d.faxCost} • Benefits: $${d.benefitsCost} • BillingFee: $${d.billingServiceFee}</td>
+        `;
+      tbody.appendChild(tr);
+      totals.totalCost += d.totalMonthlyCost;
+      totals.totalBilling += Number(prov.monthlyBillingAmount||0);
+    });
+
+    const totalsEl = document.createElement('div'); totalsEl.className='totals';
+    const combinedROI = totals.totalBilling>0 ? round(((totals.totalBilling - totals.totalCost)/totals.totalBilling)*100,2) : null;
+    totalsEl.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+          <div>
+            <div><strong>Total monthly cost (all providers):</strong> $${round(totals.totalCost,2)}</div>
+            <div class="muted">Total monthly billing (all providers): $${round(totals.totalBilling,2)}</div>
+            <div class="muted">Combined ROI: ${combinedROI===null? '—' : combinedROI + '%'}</div>
+          </div>
+          <div>
+            <button class="btn ghost" onclick="step=1; render();">Edit Inputs</button>
+            <button class="btn primary" onclick="downloadHTML()">Download HTML</button>
+          </div>
+        </div>
+      `;
+    container.appendChild(totalsEl);
+  }
+
+  // Actions
+  function addProvider(){ providers.push(createEmptyProvider(providers.length+1)); render(); }
+
+  function downloadHTML(){
+    const html = `<!doctype html>\n<html>\n<head><meta charset="utf-8"><title>Pricing Estimate</title></head><body><pre>${JSON.stringify({providers,generatedAt:new Date().toISOString()},null,2)}</pre></body></html>`;
+    const blob = new Blob([html],{type:'text/html'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href=url; a.download='pricing-estimate.html'; a.click(); URL.revokeObjectURL(url);
+  }
+
+  // initialize
+  render();
+
+  // expose for console debugging (optional)
+  window._pw = {providers, calcProviderCost, render, addProvider};
+</script>
+</body>
+</html>
